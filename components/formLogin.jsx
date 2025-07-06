@@ -1,27 +1,37 @@
 import { loginUser } from "@/api/user";
 import { tokens } from "@/app/theme";
-import { Box, Button, Input, CircularProgress } from "@mui/material";
+import { Box, Button, Input, CircularProgress, FormHelperText } from "@mui/material";
 import React from 'react';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useNotification } from '@/hooks/useNotification';
 import { useUser } from '@/contexts/UserContext';
+import { loginSchema } from '@/utils/validations';
 
 export default function FormLogin(){
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
     const [logando, setLogando] = useState(false);
     const { showSuccess, showError, showWarning } = useNotification();
     const { login } = useUser();
     
-    async function fetchData() {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset
+    } = useForm({
+        resolver: yupResolver(loginSchema),
+        mode: 'onChange'
+    });
+    
+    async function fetchData(data) {
         try {
-            const usuario = await loginUser(email, senha);
+            const usuario = await loginUser(data.email, data.senha);
             if (usuario) {
                 login(usuario);
                 showSuccess("Logado com sucesso!");
                 // Limpar formulário
-                setEmail("");
-                setSenha("");
+                reset();
             } else {
                 showError('Email ou senha incorretos');
             }
@@ -32,15 +42,10 @@ export default function FormLogin(){
         }
     }
 
-    const efetuarLogin = () => {
+    const efetuarLogin = (data) => {
         if(!logando){
             setLogando(true);
-            if(email.match('@')){
-                fetchData();
-            }else{
-                showWarning("E-mail inválido");
-                setLogando(false);
-            }
+            fetchData(data);
         }else{
             showWarning('Logando, aguarde...');
         }
@@ -61,46 +66,73 @@ export default function FormLogin(){
                             backgroundColor: tokens.primary[600]+"88",
                             borderRadius: '2em',
                         }}>
-                        <Box sx={{
-                            padding: '.5em',
-                            margin: '1em',
-                            borderRadius: '2em',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center',
-                        }}>
-                            <label margin='1px'>
-                            E-mail: <br/><Input name='email' id='emailID' 
-                            onChange={e => setEmail(e.target.value)} value={email}/>
-                            </label>
-                        </Box>
-                        
-                        <Box sx={{
-                            padding: '.5em',
-                            margin: '1em',
-                            borderRadius: '2em',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center',
-                        }}>
-                            <label>
-                            Senha: <br/><Input name='senha' id='senhaID' type='password'
-                            onChange={e => setSenha(e.target.value)} value={senha}/>
-                            </label>
-                        </Box>
-                        
-                        <Box sx={{
-                            padding: '.5em',
-                            margin: '1em',
-                            borderRadius: '2em',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center',
-                        }}>
-                            <Button variant='contained' onClick={efetuarLogin} disabled={logando}>
-                                {logando ? <CircularProgress size={20} /> : 'Entrar'}
-                            </Button>
-                        </Box>
+                        <form onSubmit={handleSubmit(efetuarLogin)}>
+                            <Box sx={{
+                                padding: '.5em',
+                                margin: '1em',
+                                borderRadius: '2em',
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center',
+                            }}>
+                                <label margin='1px'>
+                                E-mail: <br/>
+                                <Input 
+                                    name='email' 
+                                    id='emailID' 
+                                    {...register('email')}
+                                    error={!!errors.email}
+                                />
+                                {errors.email && (
+                                    <FormHelperText error>
+                                        {errors.email.message}
+                                    </FormHelperText>
+                                )}
+                                </label>
+                            </Box>
+                            
+                            <Box sx={{
+                                padding: '.5em',
+                                margin: '1em',
+                                borderRadius: '2em',
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center',
+                            }}>
+                                <label>
+                                Senha: <br/>
+                                <Input 
+                                    name='senha' 
+                                    id='senhaID' 
+                                    type='password'
+                                    {...register('senha')}
+                                    error={!!errors.senha}
+                                />
+                                {errors.senha && (
+                                    <FormHelperText error>
+                                        {errors.senha.message}
+                                    </FormHelperText>
+                                )}
+                                </label>
+                            </Box>
+                            
+                            <Box sx={{
+                                padding: '.5em',
+                                margin: '1em',
+                                borderRadius: '2em',
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center',
+                            }}>
+                                <Button 
+                                    type="submit"
+                                    variant='contained' 
+                                    disabled={logando}
+                                >
+                                    {logando ? <CircularProgress size={20} /> : 'Entrar'}
+                                </Button>
+                            </Box>
+                        </form>
                     </Box>
                 </Box>
         </>

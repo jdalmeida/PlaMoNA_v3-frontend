@@ -37,27 +37,27 @@ O **PlaMoNA** (Plataforma de Monitoramento do Nível das Águas) é uma aplicaç
 
 ---
 
-## ⚠️ Problemas Importantes (Média Prioridade)
+## ⚠️ Problemas Importantes (Média Prioridade) - ✅ CONCLUÍDO
 
-### 5. **Performance e UX**
-- [ ] **Problema**: Uso de `setTimeout` para operações assíncronas
-- [ ] **Solução**: Implementar loading states e feedback visual adequado
-- [ ] **Arquivos afetados**: Todos os formulários
+### 5. **Performance e UX** ✅
+- [x] **Problema**: Uso de `setTimeout` para operações assíncronas
+- [x] **Solução**: Implementar loading states e feedback visual adequado
+- [x] **Arquivos afetados**: `components/GraficoDia.jsx`, `components/GraficoComp.jsx`
 
-### 6. **Responsividade**
-- [ ] **Problema**: Layout pode quebrar em dispositivos móveis
-- [ ] **Solução**: Melhorar breakpoints e layout responsivo
-- [ ] **Arquivos afetados**: `components/Navbar.jsx`, páginas principais
+### 6. **Responsividade** ✅
+- [x] **Problema**: Layout pode quebrar em dispositivos móveis
+- [x] **Solução**: Melhorar breakpoints e layout responsivo
+- [x] **Arquivos afetados**: `components/Navbar.jsx`, `components/GraficoComp.jsx`
 
-### 7. **Código Duplicado**
-- [ ] **Problema**: Lógica de validação repetida em múltiplos componentes
-- [ ] **Solução**: Criar hooks customizados e utilitários
-- [ ] **Arquivos afetados**: `components/form*.jsx`
+### 7. **Código Duplicado** ✅
+- [x] **Problema**: Lógica de validação repetida em múltiplos componentes
+- [x] **Solução**: Criar hooks customizados e utilitários
+- [x] **Arquivos afetados**: `hooks/useFormValidation.js`, `hooks/useAsyncOperation.js`, `components/common/FormField.jsx`
 
-### 8. **Configuração de API**
-- [ ] **Problema**: URLs hardcoded para localhost
-- [ ] **Solução**: Usar variáveis de ambiente para diferentes ambientes
-- [ ] **Arquivos afetados**: `api/database.js`, `api/user.js`
+### 8. **Configuração de API** ✅
+- [x] **Problema**: URLs hardcoded para localhost
+- [x] **Solução**: Usar variáveis de ambiente para diferentes ambientes
+- [x] **Arquivos afetados**: `config/env.js`, `docs/ENVIRONMENT_VARIABLES.md`
 
 ---
 
@@ -173,6 +173,7 @@ O **PlaMoNA** (Plataforma de Monitoramento do Nível das Águas) é uma aplicaç
 - `fix: implementa sistema de notificações e melhora UX dos formulários`
 - `fix: implementa gerenciamento de estado centralizado com Context API`
 - `fix: implementa validação de formulários com react-hook-form e yup`
+- `feat: implementar melhorias de média prioridade (performance, responsividade, código duplicado, configuração)`
 
 ---
 

@@ -2,42 +2,20 @@ import { Refresh } from '@mui/icons-material';
 import { Box, Button, MenuItem, Select, CircularProgress } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Grafico from './Grafico';
 
-import { obterComparacao } from '@/api/database';
-import { useNotification } from '@/hooks/useNotification';
+import { useObterComparacao } from '@/hooks/useTRPC';
 
 const GraficoComp = () => {
   const [periodo, setPeriodo] = useState(localStorage.getItem('periodoComp') || 'dia');
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const { showError } = useNotification();
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      setData([]);
-
-      const result = await obterComparacao(
-        periodo,
-        localStorage.getItem('data1'),
-        localStorage.getItem('data2')
-      );
-      setData(result);
-    } catch (error) {
-      showError('Erro ao carregar dados de comparação');
-      setData([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [periodo]);
+  
+  const data1 = localStorage.getItem('data1') || 'hoje';
+  const data2 = localStorage.getItem('data2') || 'ontem';
+  
+  const { data, isLoading: loading, refetch } = useObterComparacao(periodo, data1, data2);
 
   const handlePeriodo = event => {
     const newPeriodo = event.target.value;
@@ -60,7 +38,7 @@ const GraficoComp = () => {
   };
 
   const handleRefresh = () => {
-    fetchData();
+    refetch();
   };
 
   return (
@@ -131,7 +109,7 @@ const GraficoComp = () => {
               <CircularProgress />
             </Box>
           ) : (
-            <Grafico data={data} />
+            <Grafico data={data?.data || []} />
           )}
         </Box>
       </Box>

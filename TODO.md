@@ -14,10 +14,16 @@
 - [x] Criação de hooks customizados para tRPC
 - [x] Migração do componente de login
 - [x] Migração do componente de cadastro
+- [x] Migração do componente de recuperação de senha
+- [x] Migração do componente de validação de código
+- [x] Migração do componente de configuração de sensor
+- [x] Migração do componente WeatherDisplay
+- [x] Migração do componente GraficoComp
 
 ## 🔄 Em Progresso
-- [ ] Migração dos demais componentes
-- [ ] Atualização dos hooks customizados existentes
+- [ ] Migração dos demais componentes de gráficos
+- [ ] Migração do componente de dados do usuário
+- [ ] Atualização do UserContext
 - [ ] Testes das funcionalidades
 
 ## 📋 Pendente

@@ -3,9 +3,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 
-import { atualizaConfSensor, pesquisaSensores } from '@/api/user';
 import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
+import { useAtualizaConfSensor, usePesquisaSensores } from '@/hooks/useTRPC';
 
 const FormConfiguracaoSensor = () => {
   const sensores = [
@@ -23,14 +23,14 @@ const FormConfiguracaoSensor = () => {
   const [envMax, setEnvMax] = useState(false);
   const [msgMin, setMsgMin] = useState('');
   const [msgMax, setMsgMax] = useState('');
-  const [configurando, setConfigurando] = useState(false);
-  const [pesquisando, setPesquisando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
+  const atualizaMutation = useAtualizaConfSensor();
+  const pesquisaQuery = usePesquisaSensores(codValue);
 
   const fetchData = async () => {
     try {
-      const resultado = await atualizaConfSensor(
-        codValue,
+      const resultado = await atualizaMutation.mutateAsync({
+        idSensor: codValue,
         descricao,
         nvlMin,
         nvlMax,
@@ -38,23 +38,10 @@ const FormConfiguracaoSensor = () => {
         envMax,
         msgMin,
         msgMax
-      );
-      showSuccess(resultado);
+      });
+      showSuccess(resultado.message);
     } catch (error) {
-      showError(error.message);
-    } finally {
-      setConfigurando(false);
-    }
-  };
-
-  const fetchDataPesquisa = async () => {
-    try {
-      await pesquisaSensores(codValue);
-      showSuccess('Sensor encontrado com sucesso!');
-    } catch (error) {
-      showError(error.message);
-    } finally {
-      setPesquisando(false);
+      showError(error.message || 'Erro ao atualizar configuração');
     }
   };
 
@@ -63,8 +50,10 @@ const FormConfiguracaoSensor = () => {
       showWarning('Por favor, selecione um sensor');
       return;
     }
-    setPesquisando(true);
-    fetchDataPesquisa();
+    // A pesquisa será feita automaticamente pelo hook quando codValue mudar
+    if (pesquisaQuery.data?.success) {
+      showSuccess('Sensor encontrado com sucesso!');
+    }
   };
 
   const efetuarConfigurar = () => {
@@ -76,7 +65,6 @@ const FormConfiguracaoSensor = () => {
       showWarning('Por favor, preencha todos os campos obrigatórios');
       return;
     }
-    setConfigurando(true);
     fetchData();
   };
 
@@ -136,8 +124,8 @@ const FormConfiguracaoSensor = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarPesquisa} disabled={pesquisando}>
-              {pesquisando ? <CircularProgress size={20} /> : 'Pesquisar Sensor'}
+            <Button variant='contained' onClick={efetuarPesquisa} disabled={pesquisaQuery.isLoading}>
+              {pesquisaQuery.isLoading ? <CircularProgress size={20} /> : 'Pesquisar Sensor'}
             </Button>
           </Box>
 
@@ -297,8 +285,8 @@ const FormConfiguracaoSensor = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarConfigurar} disabled={configurando}>
-              {configurando ? <CircularProgress size={20} /> : 'Configurar Sensor'}
+            <Button variant='contained' onClick={efetuarConfigurar} disabled={atualizaMutation.isLoading}>
+              {atualizaMutation.isLoading ? <CircularProgress size={20} /> : 'Configurar Sensor'}
             </Button>
           </Box>
         </Box>

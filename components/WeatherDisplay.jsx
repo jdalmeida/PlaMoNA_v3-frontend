@@ -1,8 +1,8 @@
 import { Box, Typography, CircularProgress } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { getClima } from '@/api/climaapi';
 import { tokens } from '@/app/theme';
+import { useGetClima } from '@/hooks/useTRPC';
 
 const findIconByCode = (code, isDay) => {
   const iconMap = {
@@ -56,24 +56,7 @@ const findIconByCode = (code, isDay) => {
 };
 
 const WeatherDisplay = () => {
-  const [weatherData, setWeatherData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const data = await getClima();
-      setWeatherData(data);
-    } catch (error) {
-      console.error('Erro ao buscar dados do clima:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { data: weatherData, isLoading: loading } = useGetClima();
 
   if (loading) {
     return (
@@ -93,7 +76,7 @@ const WeatherDisplay = () => {
     );
   }
 
-  if (!weatherData) {
+  if (!weatherData?.data) {
     return (
       <Box
         sx={{
@@ -113,8 +96,8 @@ const WeatherDisplay = () => {
     );
   }
 
-  const current = weatherData.current;
-  const location = weatherData.location;
+  const current = weatherData.data;
+  const location = { name: 'Venâncio Aires', region: 'RS', country: 'Brasil' };
 
   return (
     <Box

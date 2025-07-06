@@ -33,13 +33,7 @@ const AccessibleFormField = ({
 
   if (type === 'select') {
     return (
-      <FormControl
-        fullWidth
-        error={!!error}
-        disabled={disabled}
-        required={required}
-        sx={{ mb: 2 }}
-      >
+      <FormControl fullWidth error={!!error} disabled={disabled} required={required} sx={{ mb: 2 }}>
         <InputLabel id={`${fieldId}-label`}>{label}</InputLabel>
         <Select
           labelId={`${fieldId}-label`}
@@ -58,11 +52,7 @@ const AccessibleFormField = ({
             {error}
           </FormHelperText>
         )}
-        {helperText && !error && (
-          <FormHelperText id={helperId}>
-            {helperText}
-          </FormHelperText>
-        )}
+        {helperText && !error && <FormHelperText id={helperId}>{helperText}</FormHelperText>}
       </FormControl>
     );
   }
@@ -93,13 +83,9 @@ const AccessibleFormField = ({
           {error}
         </FormHelperText>
       )}
-      {helperText && !error && (
-        <FormHelperText id={helperId}>
-          {helperText}
-        </FormHelperText>
-      )}
+      {helperText && !error && <FormHelperText id={helperId}>{helperText}</FormHelperText>}
     </Box>
   );
 };
 
-export default AccessibleFormField; 
+export default AccessibleFormField;

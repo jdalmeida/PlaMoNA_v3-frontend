@@ -19,6 +19,12 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const loadUserFromStorage = () => {
       try {
+        // Verificar se estamos no cliente
+        if (typeof window === 'undefined') {
+          setLoading(false);
+          return;
+        }
+
         const userName = localStorage.getItem('userName');
         const userMail = localStorage.getItem('userMail');
         const userCPF = localStorage.getItem('userCPF');
@@ -52,6 +58,11 @@ export const UserProvider = ({ children }) => {
 
   const login = userData => {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        return;
+      }
+
       // Salvar no localStorage
       localStorage.setItem('userName', userData.nome);
       localStorage.setItem('userMail', userData.email);
@@ -72,6 +83,11 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        return;
+      }
+
       // Limpar localStorage
       localStorage.removeItem('userName');
       localStorage.removeItem('userMail');
@@ -92,6 +108,11 @@ export const UserProvider = ({ children }) => {
 
   const updateUser = userData => {
     try {
+      // Verificar se estamos no cliente
+      if (typeof window === 'undefined') {
+        return;
+      }
+
       // Atualizar localStorage
       localStorage.setItem('userName', userData.nome);
       localStorage.setItem('userMail', userData.email);

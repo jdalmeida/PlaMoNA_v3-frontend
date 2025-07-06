@@ -13,8 +13,8 @@ export const useAccessibility = () => {
     setIsHighContrast(mediaQueryHighContrast.matches);
     setIsReducedMotion(mediaQueryReducedMotion.matches);
 
-    const handleHighContrastChange = (event) => setIsHighContrast(event.matches);
-    const handleReducedMotionChange = (event) => setIsReducedMotion(event.matches);
+    const handleHighContrastChange = event => setIsHighContrast(event.matches);
+    const handleReducedMotionChange = event => setIsReducedMotion(event.matches);
 
     mediaQueryHighContrast.addEventListener('change', handleHighContrastChange);
     mediaQueryReducedMotion.addEventListener('change', handleReducedMotionChange);
@@ -45,7 +45,7 @@ export const useAccessibility = () => {
     setFontSize('medium');
   };
 
-  const announceToScreenReader = (message) => {
+  const announceToScreenReader = message => {
     const announcement = document.createElement('div');
     announcement.setAttribute('aria-live', 'polite');
     announcement.setAttribute('aria-atomic', 'true');
@@ -62,7 +62,7 @@ export const useAccessibility = () => {
     }, 1000);
   };
 
-  const focusElement = (elementId) => {
+  const focusElement = elementId => {
     const element = document.getElementById(elementId);
     if (element) {
       element.focus();
@@ -80,4 +80,4 @@ export const useAccessibility = () => {
     announceToScreenReader,
     focusElement
   };
-}; 
+};

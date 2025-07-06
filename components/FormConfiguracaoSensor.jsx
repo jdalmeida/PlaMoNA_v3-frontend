@@ -1,22 +1,21 @@
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import React from 'react';
 import { useState } from 'react';
 
 import { atualizaConfSensor, pesquisaSensores } from '@/api/user';
 import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function FormConfiguracaoSensor () {
+const FormConfiguracaoSensor = () => {
   const sensores = [
     { label: 'Sensor do Grão Para', codigo: 1 },
     { label: 'Sensor de Olavo Bilack', codigo: 2 }
   ];
 
-  const [value, setValue] = React.useState(0);
-  const [inputValue, setInputValue] = React.useState('');
-  const [codValue, setCodValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const [inputValue, setInputValue] = useState('');
+  const [codValue, setCodValue] = useState(0);
   const [descricao, setDescricao] = useState('');
   const [nvlMin, setNvlMin] = useState(0);
   const [nvlMax, setNvlMax] = useState(0);
@@ -24,13 +23,11 @@ export default function FormConfiguracaoSensor () {
   const [envMax, setEnvMax] = useState(false);
   const [msgMin, setMsgMin] = useState('');
   const [msgMax, setMsgMax] = useState('');
-  const [sensorBanco, setSensorBanco] = useState([]);
-  const [sensor, setSensor] = useState(0);
   const [configurando, setConfigurando] = useState(false);
   const [pesquisando, setPesquisando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
 
-  async function fetchData () {
+  const fetchData = async () => {
     try {
       const resultado = await atualizaConfSensor(
         codValue,
@@ -48,19 +45,18 @@ export default function FormConfiguracaoSensor () {
     } finally {
       setConfigurando(false);
     }
-  }
+  };
 
-  async function fetchDataPesquisa () {
+  const fetchDataPesquisa = async () => {
     try {
-      const resultado = await pesquisaSensores(codValue);
-      setSensorBanco(resultado);
+      await pesquisaSensores(codValue);
       showSuccess('Sensor encontrado com sucesso!');
     } catch (error) {
       showError(error.message);
     } finally {
       setPesquisando(false);
     }
-  }
+  };
 
   const efetuarPesquisa = () => {
     if (codValue === 0) {
@@ -159,7 +155,7 @@ export default function FormConfiguracaoSensor () {
               Descrição: <br />
               <Input
                 placeholder='Descrição do sensor'
-                onChange={e => setDescricao(e.target.value)}
+                onChange={event => setDescricao(event.target.value)}
                 value={descricao}
               />
             </label>
@@ -180,7 +176,7 @@ export default function FormConfiguracaoSensor () {
               <Input
                 type='number'
                 placeholder='0.00'
-                onChange={e => setNvlMin(parseFloat(e.target.value))}
+                onChange={event => setNvlMin(parseFloat(event.target.value))}
                 value={nvlMin}
               />
             </label>
@@ -201,7 +197,7 @@ export default function FormConfiguracaoSensor () {
               <Input
                 type='number'
                 placeholder='0.00'
-                onChange={e => setNvlMax(parseFloat(e.target.value))}
+                onChange={event => setNvlMax(parseFloat(event.target.value))}
                 value={nvlMax}
               />
             </label>
@@ -221,7 +217,7 @@ export default function FormConfiguracaoSensor () {
               control={
                 <Checkbox
                   checked={envMin}
-                  onChange={e => setEnvMin(e.target.checked)}
+                  onChange={event => setEnvMin(event.target.checked)}
                   color='primary'
                 />
               }
@@ -243,7 +239,7 @@ export default function FormConfiguracaoSensor () {
               control={
                 <Checkbox
                   checked={envMax}
-                  onChange={e => setEnvMax(e.target.checked)}
+                  onChange={event => setEnvMax(event.target.checked)}
                   color='primary'
                 />
               }
@@ -265,7 +261,7 @@ export default function FormConfiguracaoSensor () {
               Mensagem Nível Mínimo: <br />
               <Input
                 placeholder='Mensagem de alerta para nível mínimo'
-                onChange={e => setMsgMin(e.target.value)}
+                onChange={event => setMsgMin(event.target.value)}
                 value={msgMin}
               />
             </label>
@@ -285,7 +281,7 @@ export default function FormConfiguracaoSensor () {
               Mensagem Nível Máximo: <br />
               <Input
                 placeholder='Mensagem de alerta para nível máximo'
-                onChange={e => setMsgMax(e.target.value)}
+                onChange={event => setMsgMax(event.target.value)}
                 value={msgMax}
               />
             </label>
@@ -309,4 +305,6 @@ export default function FormConfiguracaoSensor () {
       </Box>
     </>
   );
-}
+};
+
+export default FormConfiguracaoSensor;

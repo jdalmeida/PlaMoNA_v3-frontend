@@ -38,13 +38,13 @@ const theme = createTheme({
   }
 });
 
-export default function Navbar ({ buttons, logo }) {
+const Navbar = ({ buttons = [], logo = null }) => {
   const { user, logout, isAuthenticated } = useUser();
   const { showSuccess } = useNotification();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleMenuClick = (event) => {
+  const handleMenuClick = event => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -69,8 +69,8 @@ export default function Navbar ({ buttons, logo }) {
   const drawer = (
     <Box sx={{ width: 250 }}>
       <List>
-        {buttons.map((button) => (
-          <ListItem key={button.href} component="a" href={button.href} onClick={handleDrawerToggle}>
+        {buttons.map(button => (
+          <ListItem key={button.href} component='a' href={button.href} onClick={handleDrawerToggle}>
             <ListItemButton>
               <ListItemText primary={button.text} />
             </ListItemButton>
@@ -84,7 +84,7 @@ export default function Navbar ({ buttons, logo }) {
     <>
       <ThemeProvider theme={theme}>
         <Box
-          className="flex py-3 shadow-lg lg:px-40 md:px-10"
+          className='flex py-3 shadow-lg lg:px-40 md:px-10'
           sx={{
             backgroundColor: tokens.primary[100] + '77',
             flexDirection: { sm: 'row', xs: 'column' },
@@ -100,12 +100,12 @@ export default function Navbar ({ buttons, logo }) {
               alignItems: 'center',
               gap: 2
             }}
-            className="align-center justify-center p-3 lg:text-3xl md:text-lg"
+            className='align-center justify-center p-3 lg:text-3xl md:text-lg'
           >
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
+              color='inherit'
+              aria-label='open drawer'
+              edge='start'
               onClick={handleDrawerToggle}
               sx={{ mr: 2, display: { sm: 'none' } }}
             >
@@ -121,13 +121,13 @@ export default function Navbar ({ buttons, logo }) {
               display: { xs: 'none', sm: 'flex' },
               gap: '.5em'
             }}
-            className="align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2"
+            className='align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2'
           >
-            {buttons.map((button) => (
+            {buttons.map(button => (
               <Button
-                variant="outlined"
+                variant='outlined'
                 size={'small'}
-                color="primary"
+                color='primary'
                 key={button.href}
                 href={button.href}
                 sx={{
@@ -166,7 +166,7 @@ export default function Navbar ({ buttons, logo }) {
                   }}
                 >
                   <MenuItem disabled>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography variant='body2' color='textSecondary'>
                       Olá, {user?.nome}
                     </Typography>
                   </MenuItem>
@@ -179,7 +179,7 @@ export default function Navbar ({ buttons, logo }) {
 
         {/* Mobile Drawer */}
         <Drawer
-          variant="temporary"
+          variant='temporary'
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
@@ -206,7 +206,7 @@ export default function Navbar ({ buttons, logo }) {
               px: { xs: 1, sm: 2 }
             }}
           >
-            <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+            <Slide direction='left' in={true} mountOnEnter unmountOnExit>
               <Typography
                 variant={`${theme.breakpoints.down('md') ? 'body2' : 'body1'}`}
                 color={'#fff'}
@@ -225,4 +225,6 @@ export default function Navbar ({ buttons, logo }) {
       </ThemeProvider>
     </>
   );
-}
+};
+
+export default Navbar;

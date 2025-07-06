@@ -1,116 +1,37 @@
 import { Box, Button, Input, CircularProgress } from '@mui/material';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { recuperarSenha } from '@/api/user';
-import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
 export default function FormRecuperar () {
   const [email, setEmail] = useState('');
-  const [confEmail, setConfEmail] = useState('');
-  const [enviando, setEnviando] = useState(false);
-  const { showSuccess, showError, showWarning } = useNotification();
+  const [carregando, setCarregando] = useState(false);
+  const { showSuccess, showError } = useNotification();
 
-  async function fetchData () {
+  const handleSubmit = async event => {
+    event.preventDefault();
+    setCarregando(true);
     try {
       const resultado = await recuperarSenha(email);
-      showSuccess(resultado);
+      if (resultado) {
+        showSuccess('Email de recuperação enviado!');
+      } else {
+        showError('Email não encontrado!');
+      }
     } catch (error) {
       showError(error.message);
     } finally {
-      setEnviando(false);
-    }
-  }
-
-  const efetuarRecuperacao = () => {
-    if (email.match('@') && email == confEmail) {
-      setEnviando(true);
-      fetchData();
-    } else {
-      showWarning('Email inválido ou não compatível');
+      setCarregando(false);
     }
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center'
-        }}
-      >
-        <Box
-          sx={{
-            width: { sm: '35em', xs: '20em' },
-            height: 'auto',
-            padding: '.5em',
-            margin: '1em',
-            backgroundColor: tokens.primary[600] + '88',
-            borderRadius: '2em'
-          }}
-        >
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <label>
-              E-mail: <br />
-              <Input
-                name='email'
-                pattern='email'
-                placeholder='exemplo@exemplo.com'
-                onChange={e => setEmail(e.target.value)}
-                value={email}
-              />
-            </label>
-          </Box>
-
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <label>
-              Confirmar E-mail: <br />
-              <Input
-                name='confEmail'
-                pattern='email'
-                placeholder='exemplo@exemplo.com'
-                onChange={e => setConfEmail(e.target.value)}
-                value={confEmail}
-              />
-            </label>
-          </Box>
-
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <Button variant='contained' onClick={efetuarRecuperacao} disabled={enviando}>
-              {enviando ? <CircularProgress size={20} /> : 'Enviar Email de Recuperação'}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </>
+    <Box component='form' onSubmit={handleSubmit}>
+      <Input value={email} onChange={event => setEmail(event.target.value)} placeholder='Email' />
+      <Button type='submit' disabled={carregando} variant='contained' color='primary'>
+        {carregando ? <CircularProgress size={24} /> : 'Recuperar Senha'}
+      </Button>
+    </Box>
   );
 }

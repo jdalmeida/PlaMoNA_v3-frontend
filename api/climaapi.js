@@ -1,8 +1,9 @@
 'use server';
 import axios from 'axios';
+
 import { config, validateConfig } from '@/config/env';
 
-export default async function getClima() {
+const getClima = async () => {
   try {
     validateConfig();
 
@@ -14,4 +15,7 @@ export default async function getClima() {
     console.error('Erro ao obter dados do clima:', error.message);
     throw new Error('Não foi possível obter dados do clima. Tente novamente mais tarde.');
   }
-}
+};
+
+export { getClima };
+export default getClima;

@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import { tokens } from '@/app/theme';
 
-export default function Footer () {
+const Footer = () => {
   return (
     <>
       <Box
@@ -13,7 +13,7 @@ export default function Footer () {
         mt='5em'
         className='shadow-lg'
         sx={{
-          background: tokens.blueAccent[300] + '77',
+          background: tokens.primary[300] + '77',
           color: '#000000',
           backdropFilter: 'blur(2px)'
         }}
@@ -48,4 +48,6 @@ export default function Footer () {
       </Box>
     </>
   );
-}
+};
+
+export default Footer;

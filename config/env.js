@@ -65,11 +65,11 @@ export const validateConfig = () => {
     { key: 'NEXT_PUBLIC_BACKEND_URL', value: config.backend.url }
   ];
 
-  const missing = requiredVars.filter((variable) => !variable.value);
+  const missing = requiredVars.filter(variable => !variable.value);
 
   if (missing.length > 0) {
     const errorMessage =
-      `Variáveis de ambiente obrigatórias não configuradas: ${missing.map((variable) => variable.key).join(', ')}. ` +
+      `Variáveis de ambiente obrigatórias não configuradas: ${missing.map(variable => variable.key).join(', ')}. ` +
       'Configure estas variáveis no arquivo .env.local';
 
     if (config.app.isDevelopment) {

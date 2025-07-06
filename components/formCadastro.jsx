@@ -1,48 +1,46 @@
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
-import React from 'react';
 import { useState } from 'react';
 
 import { registerUser } from '@/api/user';
 import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
-function testaCPF (cpf) {
+const testaCPF = cpf => {
   cpf = cpf.replace(/\D/g, '');
   if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
   let result = true;
-  [9, 10].forEach((j) => {
+  [9, 10].forEach(j => {
     let soma = 0,
-      r;
+      re;
     cpf
       .split(/(?=)/)
       .splice(0, j)
-      .forEach((e, i) => {
-        soma += parseInt(e) * (j + 2 - (i + 1));
+      .forEach((element, i) => {
+        soma += parseInt(element) * (j + 2 - (i + 1));
       });
-    r = soma % 11;
-    r = r < 2 ? 0 : 11 - r;
-    if (r != cpf.substring(j, j + 1)) result = false;
+    re = soma % 11;
+    re = re < 2 ? 0 : 11 - re;
+    if (re != cpf.substring(j, j + 1)) result = false;
   });
   return result;
-}
+};
 
-export default function Cadastro () {
+const Cadastro = () => {
   const [nome, setNome] = useState('');
   const [cpf, setCPF] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [alerta_email, setAlertaEmail] = useState(false);
-  const [alerta_sms, setAlertaSMS] = useState(false);
+  const [alertaEmail, setAlertaEmail] = useState(false);
+  const [alertaSMS, setAlertaSMS] = useState(false);
   const [senha, setSenha] = useState('');
   const [confSenha, setConfSenha] = useState('');
   const [endereco, setEndereco] = useState('');
-  const [resposta, setResposta] = useState('');
-  const [alerta_smsInt, setAlerta_smsInt] = useState(0);
-  const [alerta_emailInt, setAlerta_emailInt] = useState(0);
+  const [alertaSMSInt, setalertaSMSInt] = useState(0);
+  const [alertaEmailInt, setalertaEmailInt] = useState(0);
   const [cadastrando, setCadastrando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
 
-  async function fetchData () {
+  const fetchData = async () => {
     try {
       const resposta = await registerUser(
         nome,
@@ -50,11 +48,10 @@ export default function Cadastro () {
         endereco,
         email,
         telefone,
-        alerta_smsInt,
-        alerta_emailInt,
+        alertaSMSInt,
+        alertaEmailInt,
         senha
       );
-      setResposta(resposta);
 
       if (resposta == 0) {
         showError('Erro ao criar usuário');
@@ -78,7 +75,7 @@ export default function Cadastro () {
     } finally {
       setCadastrando(false);
     }
-  }
+  };
 
   const efetuarCadastro = () => {
     if (
@@ -98,15 +95,15 @@ export default function Cadastro () {
         if (senha.match(regex) && senha == confSenha) {
           if (testaCPF(cpf)) {
             if (email.match('@')) {
-              if (alerta_email) {
-                setAlerta_emailInt(1);
+              if (alertaEmail) {
+                setalertaEmailInt(1);
               } else {
-                setAlerta_emailInt(0);
+                setalertaEmailInt(0);
               }
-              if (alerta_sms) {
-                setAlerta_smsInt(1);
+              if (alertaSMS) {
+                setalertaSMSInt(1);
               } else {
-                setAlerta_smsInt(0);
+                setalertaSMSInt(0);
               }
 
               setCadastrando(true);
@@ -159,7 +156,12 @@ export default function Cadastro () {
           >
             <label margin='1px'>
               Nome: <br />
-              <Input name='nome' id='nomeID' onChange={e => setNome(e.target.value)} value={nome} />
+              <Input
+                name='nome'
+                id='nomeID'
+                onChange={event => setNome(event.target.value)}
+                value={nome}
+              />
             </label>
           </Box>
 
@@ -177,7 +179,7 @@ export default function Cadastro () {
               Endereco: <br />
               <Input
                 placeholder='Rua, Nº, Bairro'
-                onChange={e => setEndereco(e.target.value)}
+                onChange={event => setEndereco(event.target.value)}
                 value={endereco}
               />
             </label>
@@ -199,7 +201,7 @@ export default function Cadastro () {
                 name='cpf'
                 id='cpfID'
                 maxLength='14'
-                onChange={e => setCPF(e.target.value)}
+                onChange={event => setCPF(event.target.value)}
                 value={cpf}
               />
             </label>
@@ -221,7 +223,7 @@ export default function Cadastro () {
                 name='email'
                 pattern='email'
                 placeholder='exemplo@exemplo.com'
-                onChange={e => setEmail(e.target.value)}
+                onChange={event => setEmail(event.target.value)}
                 value={email}
               />
             </label>
@@ -241,7 +243,7 @@ export default function Cadastro () {
               Telefone: <br />
               <Input
                 placeholder='(00) 00000-0000'
-                onChange={e => setTelefone(e.target.value)}
+                onChange={event => setTelefone(event.target.value)}
                 value={telefone}
               />
             </label>
@@ -262,7 +264,7 @@ export default function Cadastro () {
               <Input
                 type='password'
                 placeholder='Mínimo 8 caracteres'
-                onChange={e => setSenha(e.target.value)}
+                onChange={event => setSenha(event.target.value)}
                 value={senha}
               />
             </label>
@@ -283,7 +285,7 @@ export default function Cadastro () {
               <Input
                 type='password'
                 placeholder='Confirme sua senha'
-                onChange={e => setConfSenha(e.target.value)}
+                onChange={event => setConfSenha(event.target.value)}
                 value={confSenha}
               />
             </label>
@@ -302,8 +304,8 @@ export default function Cadastro () {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={alerta_email}
-                  onChange={e => setAlertaEmail(e.target.checked)}
+                  checked={alertaEmail}
+                  onChange={event => setAlertaEmail(event.target.checked)}
                   color='primary'
                 />
               }
@@ -324,8 +326,8 @@ export default function Cadastro () {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={alerta_sms}
-                  onChange={e => setAlertaSMS(e.target.checked)}
+                  checked={alertaSMS}
+                  onChange={event => setAlertaSMS(event.target.checked)}
                   color='primary'
                 />
               }
@@ -351,4 +353,6 @@ export default function Cadastro () {
       </Box>
     </>
   );
-}
+};
+
+export default Cadastro;

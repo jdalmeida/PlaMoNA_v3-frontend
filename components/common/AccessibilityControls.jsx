@@ -5,13 +5,8 @@ import React from 'react';
 import { useAccessibility } from '@/hooks/useAccessibility';
 
 const AccessibilityControls = () => {
-  const {
-    fontSize,
-    increaseFontSize,
-    decreaseFontSize,
-    resetFontSize,
-    announceToScreenReader
-  } = useAccessibility();
+  const { fontSize, increaseFontSize, decreaseFontSize, resetFontSize, announceToScreenReader } =
+    useAccessibility();
 
   const handleIncreaseFont = () => {
     increaseFontSize();
@@ -45,49 +40,49 @@ const AccessibilityControls = () => {
         border: '1px solid',
         borderColor: 'divider'
       }}
-      role="toolbar"
-      aria-label="Controles de acessibilidade"
+      role='toolbar'
+      aria-label='Controles de acessibilidade'
     >
-      <Typography variant="caption" sx={{ fontWeight: 600, textAlign: 'center' }}>
+      <Typography variant='caption' sx={{ fontWeight: 600, textAlign: 'center' }}>
         Acessibilidade
       </Typography>
-      
+
       <Box sx={{ display: 'flex', gap: '4px' }}>
-        <Tooltip title="Diminuir fonte" placement="top">
+        <Tooltip title='Diminuir fonte' placement='top'>
           <IconButton
-            size="small"
+            size='small'
             onClick={handleDecreaseFont}
-            aria-label="Diminuir tamanho da fonte"
+            aria-label='Diminuir tamanho da fonte'
             disabled={fontSize === 'small'}
           >
-            <ZoomOut fontSize="small" />
+            <ZoomOut fontSize='small' />
           </IconButton>
         </Tooltip>
-        
-        <Tooltip title="Aumentar fonte" placement="top">
+
+        <Tooltip title='Aumentar fonte' placement='top'>
           <IconButton
-            size="small"
+            size='small'
             onClick={handleIncreaseFont}
-            aria-label="Aumentar tamanho da fonte"
+            aria-label='Aumentar tamanho da fonte'
             disabled={fontSize === 'x-large'}
           >
-            <ZoomIn fontSize="small" />
+            <ZoomIn fontSize='small' />
           </IconButton>
         </Tooltip>
-        
-        <Tooltip title="Redefinir fonte" placement="top">
+
+        <Tooltip title='Redefinir fonte' placement='top'>
           <IconButton
-            size="small"
+            size='small'
             onClick={handleResetFont}
-            aria-label="Redefinir tamanho da fonte"
+            aria-label='Redefinir tamanho da fonte'
             disabled={fontSize === 'medium'}
           >
-            <RestartAlt fontSize="small" />
+            <RestartAlt fontSize='small' />
           </IconButton>
         </Tooltip>
       </Box>
-      
-      <Typography variant="caption" sx={{ textAlign: 'center', color: 'text.secondary' }}>
+
+      <Typography variant='caption' sx={{ textAlign: 'center', color: 'text.secondary' }}>
         {fontSize === 'small' && 'Pequeno'}
         {fontSize === 'medium' && 'Médio'}
         {fontSize === 'large' && 'Grande'}
@@ -97,4 +92,4 @@ const AccessibilityControls = () => {
   );
 };
 
-export default AccessibilityControls; 
+export default AccessibilityControls;

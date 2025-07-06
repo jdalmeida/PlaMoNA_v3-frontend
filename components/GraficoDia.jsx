@@ -20,7 +20,7 @@ const fetchData = async (dia1, setData, setLoading, showError) => {
   }
 };
 
-export default function GraficoDia () {
+const GraficoDia = () => {
   const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -50,7 +50,7 @@ export default function GraficoDia () {
           display: 'flex',
           gap: '1em',
           flexDirection: 'column',
-          p: '0.5em 5em'
+          padding: '0.5em 5em'
         }}
       >
         <Box
@@ -105,4 +105,6 @@ export default function GraficoDia () {
       </Box>
     </Box>
   );
-}
+};
+
+export default GraficoDia;

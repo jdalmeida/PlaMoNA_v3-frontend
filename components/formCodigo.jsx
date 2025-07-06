@@ -1,146 +1,41 @@
 import { Box, Button, Input, CircularProgress } from '@mui/material';
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-import { enviaNovaSenha } from '@/api/user';
-import { tokens } from '@/app/theme';
+import { validateCodigo } from '@/api/user';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function FormRecuperar () {
+export default function FormCodigo () {
   const [codigo, setCodigo] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confSenha, setConfSenha] = useState('');
-  const [alterando, setAlterando] = useState(false);
-  const { showSuccess, showError, showWarning } = useNotification();
+  const [carregando, setCarregando] = useState(false);
+  const { showSuccess, showError } = useNotification();
 
-  async function fetchData () {
+  const handleSubmit = async event => {
+    event.preventDefault();
+    setCarregando(true);
     try {
-      const resultado = await enviaNovaSenha(codigo, senha);
-      showSuccess(resultado);
-      // Limpar formulário
-      setCodigo('');
-      setSenha('');
-      setConfSenha('');
+      const resultado = await validateCodigo(codigo);
+      if (resultado) {
+        showSuccess('Código validado com sucesso!');
+      } else {
+        showError('Código inválido!');
+      }
     } catch (error) {
       showError(error.message);
     } finally {
-      setAlterando(false);
-    }
-  }
-
-  const AlterarSenha = () => {
-    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/;
-    if (senha.match(regex) && senha == confSenha) {
-      if (codigo != '') {
-        setAlterando(true);
-        fetchData();
-      } else {
-        showWarning('Por favor, informe o código de recuperação');
-      }
-    } else {
-      showWarning(
-        'Senha inválida. Deve conter pelo menos 8 caracteres, incluindo maiúsculas, minúsculas, números e símbolos.'
-      );
+      setCarregando(false);
     }
   };
 
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center'
-        }}
-      >
-        <Box
-          sx={{
-            width: { sm: '35em', xs: '20em' },
-            height: 'auto',
-            padding: '.5em',
-            margin: '1em',
-            backgroundColor: tokens.primary[600] + '88',
-            borderRadius: '2em'
-          }}
-        >
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <label>
-              Código de Recuperação: <br />
-              <Input
-                placeholder='Digite o código recebido por email'
-                onChange={e => setCodigo(e.target.value)}
-                value={codigo}
-              />
-            </label>
-          </Box>
-
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <label>
-              Nova Senha: <br />
-              <Input
-                type='password'
-                placeholder='Mínimo 8 caracteres'
-                onChange={e => setSenha(e.target.value)}
-                value={senha}
-              />
-            </label>
-          </Box>
-
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <label>
-              Confirmar Nova Senha: <br />
-              <Input
-                type='password'
-                placeholder='Confirme sua nova senha'
-                onChange={e => setConfSenha(e.target.value)}
-                value={confSenha}
-              />
-            </label>
-          </Box>
-
-          <Box
-            sx={{
-              padding: '.5em',
-              margin: '1em',
-              borderRadius: '2em',
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}
-          >
-            <Button variant='contained' onClick={AlterarSenha} disabled={alterando}>
-              {alterando ? <CircularProgress size={20} /> : 'Alterar Senha'}
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-    </>
+    <Box component='form' onSubmit={handleSubmit}>
+      <Input
+        value={codigo}
+        onChange={event => setCodigo(event.target.value)}
+        placeholder='Digite o código'
+      />
+      <Button type='submit' disabled={carregando} variant='contained' color='primary'>
+        {carregando ? <CircularProgress size={24} /> : 'Validar Código'}
+      </Button>
+    </Box>
   );
 }

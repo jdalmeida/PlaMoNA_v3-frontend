@@ -104,18 +104,21 @@ O **PlaMoNA** (Plataforma de Monitoramento do Nível das Águas) é uma aplicaç
 ## 🎨 Melhorias de UI/UX - ✅ CONCLUÍDO
 
 ### 13. **Design System** ✅
+
 - [x] **Problema**: Tema inconsistente entre componentes
 - [x] **Solução**: Criar design system consistente
 - [x] **Arquivos afetados**: `app/theme.js`, todos os componentes
 - [x] **Status**: Sistema de tema robusto implementado com tokens
 
 ### 14. **Acessibilidade** ✅
+
 - [x] **Problema**: Falta de atributos de acessibilidade
 - [x] **Solução**: Implementar ARIA labels e navegação por teclado
 - [x] **Arquivos afetados**: Todos os componentes
 - [x] **Status**: Componentes acessíveis e controles de acessibilidade criados
 
 ### 15. **Feedback Visual** ✅
+
 - [x] **Problema**: Falta de indicadores de loading e sucesso
 - [x] **Solução**: Implementar skeleton loaders e feedback visual
 - [x] **Arquivos afetados**: Todos os formulários

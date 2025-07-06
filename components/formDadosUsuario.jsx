@@ -1,39 +1,38 @@
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
-import React from 'react';
 import { useState, useEffect } from 'react';
 
 import { tokens } from '@/app/theme';
 import { useUser } from '@/contexts/UserContext';
 import { useNotification } from '@/hooks/useNotification';
 
-function testaCPF (cpf) {
+const testaCPF = cpf => {
   cpf = cpf.replace(/\D/g, '');
   if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
   let result = true;
-  [9, 10].forEach((j) => {
+  [9, 10].forEach(j => {
     let soma = 0,
-      r;
+      re;
     cpf
       .split(/(?=)/)
       .splice(0, j)
-      .forEach((e, i) => {
-        soma += parseInt(e) * (j + 2 - (i + 1));
+      .forEach((element, i) => {
+        soma += parseInt(element) * (j + 2 - (i + 1));
       });
-    r = soma % 11;
-    r = r < 2 ? 0 : 11 - r;
-    if (r != cpf.substring(j, j + 1)) result = false;
+    re = soma % 11;
+    re = re < 2 ? 0 : 11 - re;
+    if (re != cpf.substring(j, j + 1)) result = false;
   });
   return result;
-}
+};
 
-export default function DadosUsuario () {
+const DadosUsuario = () => {
   const { user, updateUser } = useUser();
   const [nome, setNome] = useState('');
   const [cpf, setCPF] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
-  const [alerta_email, setAlertaEmail] = useState(false);
-  const [alerta_sms, setAlertaSMS] = useState(false);
+  const [alertaEmail, setAlertaEmail] = useState(false);
+  const [alertaSMS, setAlertaSMS] = useState(false);
   const [endereco, setEndereco] = useState('');
   const [atualizando, setAtualizando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
@@ -45,18 +44,14 @@ export default function DadosUsuario () {
       setCPF(user.cpf || '');
       setEmail(user.email || '');
       setTelefone(user.telefone || '');
-      setAlertaEmail(user.alerta_email === '1');
-      setAlertaSMS(user.alerta_sms === '1');
+      setAlertaEmail(user.alertaEmail === '1');
+      setAlertaSMS(user.alertaSMS === '1');
       setEndereco(user.endereco || '');
     }
   }, [user]);
 
-  async function fetchData () {
+  const fetchData = async () => {
     try {
-      // TODO: Implementar função de atualização de dados do usuário no backend
-      // const resposta = await updateUserData(nome, cpf, endereco, email, telefone, alerta_sms ? 1 : 0, alerta_email ? 1 : 0);
-
-      // Por enquanto, vamos simular uma atualização bem-sucedida
       const userData = {
         ...user,
         nome,
@@ -64,8 +59,8 @@ export default function DadosUsuario () {
         email,
         telefone,
         endereco,
-        alerta_sms: alerta_sms ? '1' : '0',
-        alerta_email: alerta_email ? '1' : '0'
+        alertaSMS: alertaSMS ? '1' : '0',
+        alertaEmail: alertaEmail ? '1' : '0'
       };
 
       updateUser(userData);
@@ -75,7 +70,7 @@ export default function DadosUsuario () {
     } finally {
       setAtualizando(false);
     }
-  }
+  };
 
   const efetuarAlteracao = () => {
     if ((email == '') | (nome == '') | (cpf == '') | (endereco == '') | (telefone == '')) {
@@ -102,7 +97,7 @@ export default function DadosUsuario () {
 
   if (!user) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', padding: '4px' }}>
         <p>Usuário não autenticado</p>
       </Box>
     );
@@ -139,7 +134,12 @@ export default function DadosUsuario () {
           >
             <label margin='1px'>
               Nome: <br />
-              <Input name='nome' id='nomeID' onChange={e => setNome(e.target.value)} value={nome} />
+              <Input
+                name='nome'
+                id='nomeID'
+                onChange={event => setNome(event.target.value)}
+                value={nome}
+              />
             </label>
           </Box>
 
@@ -157,7 +157,7 @@ export default function DadosUsuario () {
               Endereco: <br />
               <Input
                 placeholder='Rua, Nº, Bairro'
-                onChange={e => setEndereco(e.target.value)}
+                onChange={event => setEndereco(event.target.value)}
                 value={endereco}
               />
             </label>
@@ -179,7 +179,7 @@ export default function DadosUsuario () {
                 name='cpf'
                 id='cpfID'
                 maxLength='14'
-                onChange={e => setCPF(e.target.value)}
+                onChange={event => setCPF(event.target.value)}
                 value={cpf}
               />
             </label>
@@ -201,7 +201,7 @@ export default function DadosUsuario () {
                 name='email'
                 pattern='email'
                 placeholder='exemplo@exemplo.com'
-                onChange={e => setEmail(e.target.value)}
+                onChange={event => setEmail(event.target.value)}
                 value={email}
               />
             </label>
@@ -221,7 +221,7 @@ export default function DadosUsuario () {
               Telefone: <br />
               <Input
                 placeholder='(00) 00000-0000'
-                onChange={e => setTelefone(e.target.value)}
+                onChange={event => setTelefone(event.target.value)}
                 value={telefone}
               />
             </label>
@@ -240,8 +240,8 @@ export default function DadosUsuario () {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={alerta_email}
-                  onChange={e => setAlertaEmail(e.target.checked)}
+                  checked={alertaEmail}
+                  onChange={event => setAlertaEmail(event.target.checked)}
                   color='primary'
                 />
               }
@@ -262,8 +262,8 @@ export default function DadosUsuario () {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={alerta_sms}
-                  onChange={e => setAlertaSMS(e.target.checked)}
+                  checked={alertaSMS}
+                  onChange={event => setAlertaSMS(event.target.checked)}
                   color='primary'
                 />
               }
@@ -289,4 +289,6 @@ export default function DadosUsuario () {
       </Box>
     </>
   );
-}
+};
+
+export default DadosUsuario;

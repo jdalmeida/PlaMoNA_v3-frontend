@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: true
-  }
+  // Configurações removidas pois serverActions já está disponível por padrão no Next.js 14
 };
 
 module.exports = nextConfig;

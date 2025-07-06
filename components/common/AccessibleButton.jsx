@@ -29,9 +29,9 @@ const AccessibleButton = ({
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
       aria-busy={loading}
-      role="button"
+      role='button'
       tabIndex={disabled ? -1 : 0}
-      onKeyDown={(event) => {
+      onKeyDown={event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           if (!disabled && !loading && onClick) {
@@ -46,4 +46,4 @@ const AccessibleButton = ({
   );
 };
 
-export default AccessibleButton; 
+export default AccessibleButton;

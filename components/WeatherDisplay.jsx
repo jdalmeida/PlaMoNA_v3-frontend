@@ -106,7 +106,7 @@ const WeatherDisplay = () => {
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
         }}
       >
-        <Typography variant="body1" color={tokens.text.secondary}>
+        <Typography variant='body1' color={tokens.text.secondary}>
           Dados do clima não disponíveis
         </Typography>
       </Box>
@@ -140,15 +140,15 @@ const WeatherDisplay = () => {
         }}
       >
         <Box>
-          <Typography variant="h6" color={tokens.text.primary} sx={{ fontWeight: 600 }}>
+          <Typography variant='h6' color={tokens.text.primary} sx={{ fontWeight: 600 }}>
             {location.name}
           </Typography>
-          <Typography variant="body2" color={tokens.text.secondary}>
+          <Typography variant='body2' color={tokens.text.secondary}>
             {location.region}, {location.country}
           </Typography>
         </Box>
         <Typography
-          variant="h3"
+          variant='h3'
           sx={{
             fontSize: '3rem',
             color: tokens.primary[600],
@@ -169,18 +169,18 @@ const WeatherDisplay = () => {
         }}
       >
         <Box>
-          <Typography variant="h4" color={tokens.text.primary} sx={{ fontWeight: 700 }}>
+          <Typography variant='h4' color={tokens.text.primary} sx={{ fontWeight: 700 }}>
             {Math.round(current.temp_c)}°C
           </Typography>
-          <Typography variant="body1" color={tokens.text.secondary}>
+          <Typography variant='body1' color={tokens.text.secondary}>
             {current.condition.text}
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'right' }}>
-          <Typography variant="body2" color={tokens.text.secondary}>
+          <Typography variant='body2' color={tokens.text.secondary}>
             Sensação: {Math.round(current.feelslike_c)}°C
           </Typography>
-          <Typography variant="body2" color={tokens.text.secondary}>
+          <Typography variant='body2' color={tokens.text.secondary}>
             Umidade: {current.humidity}%
           </Typography>
         </Box>
@@ -197,26 +197,26 @@ const WeatherDisplay = () => {
         }}
       >
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" color={tokens.text.secondary} sx={{ marginBottom: '4px' }}>
+          <Typography variant='body2' color={tokens.text.secondary} sx={{ marginBottom: '4px' }}>
             Vento
           </Typography>
-          <Typography variant="body1" color={tokens.text.primary} sx={{ fontWeight: 500 }}>
+          <Typography variant='body1' color={tokens.text.primary} sx={{ fontWeight: 500 }}>
             {Math.round(current.wind_kph)} km/h
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" color={tokens.text.secondary} sx={{ marginBottom: '4px' }}>
+          <Typography variant='body2' color={tokens.text.secondary} sx={{ marginBottom: '4px' }}>
             Pressão
           </Typography>
-          <Typography variant="body1" color={tokens.text.primary} sx={{ fontWeight: 500 }}>
+          <Typography variant='body1' color={tokens.text.primary} sx={{ fontWeight: 500 }}>
             {current.pressure_mb} mb
           </Typography>
         </Box>
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="body2" color={tokens.text.secondary} sx={{ marginBottom: '4px' }}>
+          <Typography variant='body2' color={tokens.text.secondary} sx={{ marginBottom: '4px' }}>
             Visibilidade
           </Typography>
-          <Typography variant="body1" color={tokens.text.primary} sx={{ fontWeight: 500 }}>
+          <Typography variant='body1' color={tokens.text.primary} sx={{ fontWeight: 500 }}>
             {current.vis_km} km
           </Typography>
         </Box>

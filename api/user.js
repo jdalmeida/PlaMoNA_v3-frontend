@@ -1,5 +1,6 @@
 'use server';
 import axios from 'axios';
+
 import { config } from '@/config/env';
 
 // Função para enviar os dados de registro para o servidor
@@ -9,8 +10,8 @@ export const registerUser = async (
   endereco,
   email,
   telefone,
-  alerta_sms,
-  alerta_email,
+  alertaSMS,
+  alertaEmail,
   senha
 ) => {
   try {
@@ -20,8 +21,8 @@ export const registerUser = async (
       endereco,
       email,
       telefone,
-      alerta_sms,
-      alerta_email,
+      alertaSMS,
+      alertaEmail,
       senha
     });
     return response.data.loginState;
@@ -107,5 +108,15 @@ export const pesquisaSensores = async idSensor => {
   } catch (error) {
     console.error('Erro ao pesquisar sensores:', error);
     throw new Error('Erro ao pesquisar sensores. Tente novamente mais tarde.');
+  }
+};
+
+export const validateCodigo = async (codigo) => {
+  try {
+    const response = await axios.post(`${config.backend.url}/validateCodigo`, { codigo });
+    return response.data.valid;
+  } catch (error) {
+    console.error('Erro ao validar código:', error);
+    throw new Error('Erro ao validar código. Tente novamente mais tarde.');
   }
 };

@@ -9,10 +9,8 @@ import Grafico from './Grafico';
 import { obterComparacao } from '@/api/database';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function GraficoComp () {
+const GraficoComp = () => {
   const [periodo, setPeriodo] = useState(localStorage.getItem('periodoComp') || 'dia');
-  const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
-  const [dia2, setDia2] = useState(new Date().toISOString().substring(0, 10));
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const { showError } = useNotification();
@@ -38,6 +36,7 @@ export default function GraficoComp () {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodo]);
 
   const handlePeriodo = event => {
@@ -71,7 +70,7 @@ export default function GraficoComp () {
           display: 'flex',
           gap: '1em',
           flexDirection: 'column',
-          p: { sx: '0.5em', sm: '0.5em 5em' },
+          padding: { sx: '0.5em', sm: '0.5em 5em' },
           width: { sx: '16.5em', sm: '100%' }
         }}
       >
@@ -138,4 +137,6 @@ export default function GraficoComp () {
       </Box>
     </Box>
   );
-}
+};
+
+export default GraficoComp;

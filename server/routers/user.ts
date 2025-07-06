@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { hash, compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { z } from 'zod';
 
 import {
   registerUserSchema,
@@ -310,6 +311,79 @@ export const userRouter = createTRPCRouter({
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Erro ao buscar dados do usuário'
+        });
+      }
+    }),
+
+  // Atualizar dados do usuário
+  updateUser: protectedProcedure
+    .input(z.object({
+      nome: z.string().min(1, 'Nome é obrigatório'),
+      cpf: z.string().min(11, 'CPF deve ter pelo menos 11 dígitos'),
+      endereco: z.string().optional(),
+      email: z.string().email('Email inválido'),
+      telefone: z.string().min(1, 'Telefone é obrigatório'),
+      alertaSMS: z.string().optional(),
+      alertaEmail: z.string().min(1, 'Alerta de email é obrigatório')
+    }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        const userId = ctx.session.user.userId;
+        
+        // Verificar se o email já existe para outro usuário
+        const existingUser = await prisma.usuario.findFirst({
+          where: {
+            email: input.email,
+            id_usuario: { not: userId }
+          }
+        });
+
+        if (existingUser) {
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'Email já cadastrado para outro usuário'
+          });
+        }
+
+        // Atualizar usuário
+        const updatedUser = await prisma.usuario.update({
+          where: { id_usuario: userId },
+          data: {
+            nome: input.nome,
+            cpf: input.cpf,
+            endereco: input.endereco || '',
+            email: input.email,
+            telefone: input.telefone,
+            alerta_sms: input.alertaSMS || 'N',
+            alerta_email: input.alertaEmail
+          },
+          include: {
+            sensor: {
+              include: {
+                rio_alvo: {
+                  include: {
+                    cid_alvo: true
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        const { senha, ...userWithoutPassword } = updatedUser;
+
+        return {
+          success: true,
+          message: 'Dados atualizados com sucesso',
+          user: userWithoutPassword
+        };
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Erro ao atualizar dados do usuário'
         });
       }
     })

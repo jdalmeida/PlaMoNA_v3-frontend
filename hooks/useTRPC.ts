@@ -25,6 +25,10 @@ export const useMe = () => {
   return trpc.user.me.useQuery();
 };
 
+export const useUpdateUser = () => {
+  return trpc.user.updateUser.useMutation();
+};
+
 // Hooks para sensores
 export const usePesquisaSensores = (idSensor?: number) => {
   return trpc.sensor.pesquisaSensores.useQuery(

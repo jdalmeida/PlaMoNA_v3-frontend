@@ -1,6 +1,8 @@
 'use client';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
+import { useMe } from '@/hooks/useTRPC';
+
 const UserContext = createContext();
 
 export const useUser = () => {
@@ -15,6 +17,9 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Tentar carregar dados do usuário via tRPC
+  const { data: userData } = useMe();
+
   // Carregar dados do usuário do localStorage na inicialização
   useEffect(() => {
     const loadUserFromStorage = () => {
@@ -25,6 +30,14 @@ export const UserProvider = ({ children }) => {
           return;
         }
 
+        // Se temos dados do tRPC, usar eles
+        if (userData) {
+          setUser(userData);
+          setLoading(false);
+          return;
+        }
+
+        // Fallback para localStorage
         const userName = localStorage.getItem('userName');
         const userMail = localStorage.getItem('userMail');
         const userCPF = localStorage.getItem('userCPF');
@@ -41,8 +54,8 @@ export const UserProvider = ({ children }) => {
             cpf: userCPF,
             endereco: userEndereco,
             telefone: userTelefone,
-            alerta_sms: userAlertaSms,
-            alerta_email: userAlertaEmail,
+            alertaSms: userAlertaSms,
+            alertaEmail: userAlertaEmail,
             acesso: userAcess
           });
         }
@@ -54,7 +67,7 @@ export const UserProvider = ({ children }) => {
     };
 
     loadUserFromStorage();
-  }, []);
+  }, [userData]);
 
   const login = userData => {
     try {

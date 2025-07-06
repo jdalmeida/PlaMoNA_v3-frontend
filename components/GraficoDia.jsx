@@ -1,35 +1,15 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material';
 import { Box, Button, CircularProgress } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Grafico from './Grafico';
 
-import { obterDia } from '@/api/database';
-import { useNotification } from '@/hooks/useNotification';
-
-const fetchData = async (dia1, setData, setLoading, showError) => {
-  try {
-    setLoading(true);
-    const res = await obterDia('diaEsp', dia1);
-    setData(res);
-  } catch (error) {
-    showError('Erro ao carregar dados do gráfico');
-    setData([]);
-  } finally {
-    setLoading(false);
-  }
-};
+import { useObterDia } from '@/hooks/useTRPC';
 
 const GraficoDia = () => {
   const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const { showError } = useNotification();
-
-  useEffect(() => {
-    setData([]);
-    fetchData(dia1, setData, setLoading, showError);
-  }, [dia1, showError]);
+  
+  const { data, isLoading: loading } = useObterDia('diaEsp', dia1);
 
   const aumentarDia1 = () => {
     const dataAtual = new Date(dia1);
@@ -89,7 +69,7 @@ const GraficoDia = () => {
                   <CircularProgress />
                 </Box>
               ) : (
-                <Grafico data={data} />
+                <Grafico data={data?.data || []} />
               )}
             </Box>
           </Box>

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { tokens } from '@/app/theme';
 import { useUser } from '@/contexts/UserContext';
 import { useNotification } from '@/hooks/useNotification';
+import { useUpdateUser } from '@/hooks/useTRPC';
 
 const testaCPF = cpf => {
   cpf = cpf.replace(/\D/g, '');
@@ -34,8 +35,8 @@ const DadosUsuario = () => {
   const [alertaEmail, setAlertaEmail] = useState(false);
   const [alertaSMS, setAlertaSMS] = useState(false);
   const [endereco, setEndereco] = useState('');
-  const [atualizando, setAtualizando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
+  const updateMutation = useUpdateUser();
 
   // Carregar dados do usuário quando o componente montar
   useEffect(() => {
@@ -52,23 +53,22 @@ const DadosUsuario = () => {
 
   const fetchData = async () => {
     try {
-      const userData = {
-        ...user,
+      const resultado = await updateMutation.mutateAsync({
         nome,
         cpf,
         email,
         telefone,
         endereco,
-        alertaSMS: alertaSMS ? '1' : '0',
-        alertaEmail: alertaEmail ? '1' : '0'
-      };
+        alertaSMS: alertaSMS ? 'S' : 'N',
+        alertaEmail: alertaEmail ? 'S' : 'N'
+      });
 
-      updateUser(userData);
-      showSuccess('Dados atualizados com sucesso!');
+      if (resultado.success) {
+        updateUser(resultado.user);
+        showSuccess('Dados atualizados com sucesso!');
+      }
     } catch (error) {
-      showError(error.message);
-    } finally {
-      setAtualizando(false);
+      showError(error.message || 'Erro ao atualizar dados');
     }
   };
 
@@ -81,7 +81,6 @@ const DadosUsuario = () => {
       if (telefoneAlterado.length >= 10 && telefoneAlterado.length <= 11) {
         if (testaCPF(cpf)) {
           if (email.match('@')) {
-            setAtualizando(true);
             fetchData();
           } else {
             showWarning('E-mail inválido');
@@ -281,8 +280,8 @@ const DadosUsuario = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarAlteracao} disabled={atualizando}>
-              {atualizando ? <CircularProgress size={20} /> : 'Atualizar Dados'}
+            <Button variant='contained' onClick={efetuarAlteracao} disabled={updateMutation.isLoading}>
+              {updateMutation.isLoading ? <CircularProgress size={20} /> : 'Atualizar Dados'}
             </Button>
           </Box>
         </Box>

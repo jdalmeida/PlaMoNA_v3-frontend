@@ -1,9 +1,9 @@
-import { registerUser } from "@/api/user";
 import { tokens } from "@/app/theme";
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from "@mui/material";
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNotification } from '@/hooks/useNotification';
+import { useUser } from '@/contexts/UserContext';
 
 function testaCPF(cpf){
     cpf = cpf.replace(/\D/g, '');
@@ -22,36 +22,49 @@ function testaCPF(cpf){
 }
 
 export default function DadosUsuario(){
-    const [nome, setNome] = useState(localStorage.getItem("userName") || "");
-    const [cpf, setCPF] = useState(localStorage.getItem("userCPF") || "");
-    const [email, setEmail] = useState(localStorage.getItem("userMail") || "");
-    const [telefone, setTelefone] = useState(localStorage.getItem("userTelefone") || "");
-    const [alerta_email, setAlertaEmail] = useState(localStorage.getItem("userAlertaEmail") === "1");
-    const [alerta_sms, setAlertaSMS] = useState(localStorage.getItem("userAlertaSms") === "1");
-    const [endereco, setEndereco] = useState(localStorage.getItem("userEndereco") || "");
-    const [resposta, setResposta] = useState(0);
+    const { user, updateUser } = useUser();
+    const [nome, setNome] = useState("");
+    const [cpf, setCPF] = useState("");
+    const [email, setEmail] = useState("");
+    const [telefone, setTelefone] = useState("");
+    const [alerta_email, setAlertaEmail] = useState(false);
+    const [alerta_sms, setAlertaSMS] = useState(false);
+    const [endereco, setEndereco] = useState("");
     const [atualizando, setAtualizando] = useState(false);
     const { showSuccess, showError, showWarning } = useNotification();
 
+    // Carregar dados do usuário quando o componente montar
+    useEffect(() => {
+        if (user) {
+            setNome(user.nome || "");
+            setCPF(user.cpf || "");
+            setEmail(user.email || "");
+            setTelefone(user.telefone || "");
+            setAlertaEmail(user.alerta_email === "1");
+            setAlertaSMS(user.alerta_sms === "1");
+            setEndereco(user.endereco || "");
+        }
+    }, [user]);
+
     async function fetchData() {
         try {
-            // TODO: Implementar função de atualização de dados do usuário
+            // TODO: Implementar função de atualização de dados do usuário no backend
             // const resposta = await updateUserData(nome, cpf, endereco, email, telefone, alerta_sms ? 1 : 0, alerta_email ? 1 : 0);
-            // setResposta(resposta);
             
-            if(resposta==0){
-                showError("Erro ao atualizar os dados!");
-            }else if(resposta==1){
-                showSuccess("Dados atualizados com sucesso!");
-                // Atualizar localStorage
-                localStorage.setItem("userName", nome);
-                localStorage.setItem("userMail", email);
-                localStorage.setItem("userCPF", cpf);
-                localStorage.setItem("userEndereco", endereco);
-                localStorage.setItem("userTelefone", telefone);
-                localStorage.setItem("userAlertaSms", alerta_sms ? "1" : "0");
-                localStorage.setItem("userAlertaEmail", alerta_email ? "1" : "0");
-            }
+            // Por enquanto, vamos simular uma atualização bem-sucedida
+            const userData = {
+                ...user,
+                nome,
+                cpf,
+                email,
+                telefone,
+                endereco,
+                alerta_sms: alerta_sms ? "1" : "0",
+                alerta_email: alerta_email ? "1" : "0"
+            };
+            
+            updateUser(userData);
+            showSuccess("Dados atualizados com sucesso!");
         } catch (error) {
             showError(error.message);
         } finally {
@@ -81,6 +94,14 @@ export default function DadosUsuario(){
             } 
         }
     };
+
+    if (!user) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+                <p>Usuário não autenticado</p>
+            </Box>
+        );
+    }
 
     return(
         <>

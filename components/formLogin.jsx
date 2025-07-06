@@ -1,23 +1,33 @@
 import { loginUser } from "@/api/user";
 import { tokens } from "@/app/theme";
 import { Box, Button, Input, CircularProgress } from "@mui/material";
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { useNotification } from '@/hooks/useNotification';
+import { useUser } from '@/contexts/UserContext';
 
 export default function FormLogin(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [user, setUser] = useState(null);
     const [logando, setLogando] = useState(false);
     const { showSuccess, showError, showWarning } = useNotification();
+    const { login } = useUser();
     
     async function fetchData() {
         try {
             const usuario = await loginUser(email, senha);
-            setUser(usuario);
+            if (usuario) {
+                login(usuario);
+                showSuccess("Logado com sucesso!");
+                // Limpar formulário
+                setEmail("");
+                setSenha("");
+            } else {
+                showError('Email ou senha incorretos');
+            }
         } catch (error) {
             showError(error.message);
+        } finally {
             setLogando(false);
         }
     }
@@ -27,26 +37,6 @@ export default function FormLogin(){
             setLogando(true);
             if(email.match('@')){
                 fetchData();
-                setTimeout(function() {
-                    if(user!=null){
-                        showSuccess("Logado com sucesso!");
-                        
-                        localStorage.setItem("userName", user.nome);
-                        localStorage.setItem("userMail", user.email);
-                        localStorage.setItem("userCPF", user.cpf);
-                        localStorage.setItem("userEndereco", user.endereco);
-                        localStorage.setItem("userTelefone", user.telefone);
-                        localStorage.setItem("userAlertaSms", user.alerta_sms);
-                        localStorage.setItem("userAlertaEmail", user.alerta_email);
-                        localStorage.setItem("userAcess", user.acesso);
-                        
-                        setUser(null);
-                    }else{
-                        showError('Email ou senha incorretos');
-                    }
-                    setLogando(false);
-                    
-                }, 500);
             }else{
                 showWarning("E-mail inválido");
                 setLogando(false);
@@ -81,7 +71,7 @@ export default function FormLogin(){
                         }}>
                             <label margin='1px'>
                             E-mail: <br/><Input name='email' id='emailID' 
-                            onChange={e => setEmail(e.target.value)}/>
+                            onChange={e => setEmail(e.target.value)} value={email}/>
                             </label>
                         </Box>
                         
@@ -95,7 +85,7 @@ export default function FormLogin(){
                         }}>
                             <label>
                             Senha: <br/><Input name='senha' id='senhaID' type='password'
-                            onChange={e => setSenha(e.target.value)}/>
+                            onChange={e => setSenha(e.target.value)} value={senha}/>
                             </label>
                         </Box>
                         

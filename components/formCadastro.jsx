@@ -1,9 +1,9 @@
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
 import { useState } from 'react';
 
-import { registerUser } from '@/api/user';
 import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
+import { useRegisterUser } from '@/hooks/useTRPC';
 
 const testaCPF = cpf => {
   cpf = cpf.replace(/\D/g, '');
@@ -35,29 +35,26 @@ const Cadastro = () => {
   const [senha, setSenha] = useState('');
   const [confSenha, setConfSenha] = useState('');
   const [endereco, setEndereco] = useState('');
-  const [alertaSMSInt, setalertaSMSInt] = useState(0);
-  const [alertaEmailInt, setalertaEmailInt] = useState(0);
-  const [cadastrando, setCadastrando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
+  const registerMutation = useRegisterUser();
 
   const fetchData = async () => {
     try {
-      const resposta = await registerUser(
+      const alertaSMSStr = alertaSMS ? 'S' : 'N';
+      const alertaEmailStr = alertaEmail ? 'S' : 'N';
+
+      const resultado = await registerMutation.mutateAsync({
         nome,
         cpf,
         endereco,
         email,
         telefone,
-        alertaSMSInt,
-        alertaEmailInt,
+        alertaSMS: alertaSMSStr,
+        alertaEmail: alertaEmailStr,
         senha
-      );
+      });
 
-      if (resposta == 0) {
-        showError('Erro ao criar usuário');
-      } else if (resposta == 5) {
-        showError('Email informado já cadastrado');
-      } else if (resposta == 1) {
+      if (resultado.success) {
         showSuccess('Cadastro efetuado com sucesso!');
         // Limpar formulário
         setNome('');
@@ -71,9 +68,7 @@ const Cadastro = () => {
         setEndereco('');
       }
     } catch (error) {
-      showError(error.message);
-    } finally {
-      setCadastrando(false);
+      showError(error.message || 'Erro ao criar usuário');
     }
   };
 
@@ -95,18 +90,6 @@ const Cadastro = () => {
         if (senha.match(regex) && senha == confSenha) {
           if (testaCPF(cpf)) {
             if (email.match('@')) {
-              if (alertaEmail) {
-                setalertaEmailInt(1);
-              } else {
-                setalertaEmailInt(0);
-              }
-              if (alertaSMS) {
-                setalertaSMSInt(1);
-              } else {
-                setalertaSMSInt(0);
-              }
-
-              setCadastrando(true);
               fetchData();
             } else {
               showWarning('E-mail inválido');
@@ -345,8 +328,8 @@ const Cadastro = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarCadastro} disabled={cadastrando}>
-              {cadastrando ? <CircularProgress size={20} /> : 'Cadastrar'}
+            <Button variant='contained' onClick={efetuarCadastro} disabled={registerMutation.isLoading}>
+              {registerMutation.isLoading ? <CircularProgress size={20} /> : 'Cadastrar'}
             </Button>
           </Box>
         </Box>

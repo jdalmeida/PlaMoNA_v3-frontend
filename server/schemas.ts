@@ -47,6 +47,22 @@ export const validateCodigoSchema = z.object({
   codigo: z.string().min(1, 'Código é obrigatório')
 });
 
+// Schemas para medições
+export const obterMedicaoSchema = z.object({
+  periodo: z.string().min(1, 'Período é obrigatório')
+});
+
+export const obterComparacaoSchema = z.object({
+  periodo: z.string().min(1, 'Período é obrigatório'),
+  comp1: z.string().min(1, 'Comparação 1 é obrigatória'),
+  comp2: z.string().min(1, 'Comparação 2 é obrigatória')
+});
+
+export const obterDiaSchema = z.object({
+  periodo: z.enum(['dia', 'diaEsp']),
+  comp1: z.string().min(1, 'Comparação 1 é obrigatória')
+});
+
 // Tipos derivados dos schemas
 export type RegisterUserInput = z.infer<typeof registerUserSchema>;
 export type LoginUserInput = z.infer<typeof loginUserSchema>;
@@ -54,4 +70,7 @@ export type RecuperarSenhaInput = z.infer<typeof recuperarSenhaSchema>;
 export type NovaSenhaInput = z.infer<typeof novaSenhaSchema>;
 export type ConfiguracaoSensorInput = z.infer<typeof configuracaoSensorSchema>;
 export type PesquisaSensoresInput = z.infer<typeof pesquisaSensoresSchema>;
-export type ValidateCodigoInput = z.infer<typeof validateCodigoSchema>; 
+export type ValidateCodigoInput = z.infer<typeof validateCodigoSchema>;
+export type ObterMedicaoInput = z.infer<typeof obterMedicaoSchema>;
+export type ObterComparacaoInput = z.infer<typeof obterComparacaoSchema>;
+export type ObterDiaInput = z.infer<typeof obterDiaSchema>; 

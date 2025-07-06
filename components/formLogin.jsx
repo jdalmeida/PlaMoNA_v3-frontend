@@ -1,29 +1,27 @@
 import { Box, Button, Input, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
 
-import { loginUser } from '@/api/user';
 import { useNotification } from '@/hooks/useNotification';
+import { useLoginUser } from '@/hooks/useTRPC';
 
 export default function FormLogin () {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [carregando, setCarregando] = useState(false);
   const { showSuccess, showError } = useNotification();
+  const loginMutation = useLoginUser();
 
   const handleSubmit = async event => {
     event.preventDefault();
-    setCarregando(true);
     try {
-      const resultado = await loginUser(email, senha);
-      if (resultado) {
+      const resultado = await loginMutation.mutateAsync({ email, senha });
+      if (resultado.success) {
         showSuccess('Login realizado com sucesso!');
+        // Aqui você pode redirecionar ou atualizar o contexto do usuário
       } else {
         showError('Email ou senha inválidos!');
       }
     } catch (error) {
-      showError(error.message);
-    } finally {
-      setCarregando(false);
+      showError(error.message || 'Erro ao realizar login');
     }
   };
 
@@ -36,8 +34,8 @@ export default function FormLogin () {
         placeholder='Senha'
         type='password'
       />
-      <Button type='submit' disabled={carregando} variant='contained' color='primary'>
-        {carregando ? <CircularProgress size={24} /> : 'Entrar'}
+      <Button type='submit' disabled={loginMutation.isLoading} variant='contained' color='primary'>
+        {loginMutation.isLoading ? <CircularProgress size={24} /> : 'Entrar'}
       </Button>
     </Box>
   );

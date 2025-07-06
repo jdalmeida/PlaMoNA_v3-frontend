@@ -1,7 +1,9 @@
-import { Box, Button, CircularProgress } from '@mui/material';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+
 import Grafico from './Grafico';
+
 import { obterDia } from '@/api/database';
 import { useNotification } from '@/hooks/useNotification';
 
@@ -18,7 +20,7 @@ const fetchData = async (dia1, setData, setLoading, showError) => {
   }
 };
 
-export default function GraficoDia() {
+export default function GraficoDia () {
   const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);

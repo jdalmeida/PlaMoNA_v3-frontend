@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, MenuItem, Select, CircularProgress } from '@mui/material';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import Grafico from './Grafico';
-import { obterComparacao } from '@/api/database';
 import { Refresh } from '@mui/icons-material';
+import { Box, Button, MenuItem, Select, CircularProgress } from '@mui/material';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import React, { useState, useEffect } from 'react';
+
+import Grafico from './Grafico';
+
+import { obterComparacao } from '@/api/database';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function GraficoComp() {
+export default function GraficoComp () {
   const [periodo, setPeriodo] = useState(localStorage.getItem('periodoComp') || 'dia');
   const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
   const [dia2, setDia2] = useState(new Date().toISOString().substring(0, 10));

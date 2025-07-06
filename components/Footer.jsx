@@ -1,8 +1,9 @@
-import { tokens } from '@/app/theme';
 import { Box, Typography } from '@mui/material';
 import Image from 'next/image';
 
-export default function Footer() {
+import { tokens } from '@/app/theme';
+
+export default function Footer () {
   return (
     <>
       <Box

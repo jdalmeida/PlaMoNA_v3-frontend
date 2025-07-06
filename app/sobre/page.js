@@ -1,12 +1,15 @@
 'use client';
-import React from 'react';
 import { Box, Grid, Paper, ThemeProvider, Typography } from '@mui/material';
-import Grafico from '@/components/Grafico';
+import Image from 'next/image';
+import React from 'react';
+
 import { theme, tokens } from '../theme';
+
+import Footer from '@/components/Footer';
+import Grafico from '@/components/Grafico';
 import Navbar from '@/components/Navbar';
 import WeatherDisplay from '@/components/WeatherDisplay';
-import Footer from '@/components/Footer';
-import Image from 'next/image';
+
 
 const buttons = [
   {
@@ -27,7 +30,7 @@ const buttons = [
   }
 ];
 
-export default function Page() {
+export default function Page () {
   return (
     <>
       <ThemeProvider theme={theme}>

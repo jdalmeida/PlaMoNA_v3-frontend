@@ -1,14 +1,16 @@
 'use client';
-import React, { useContext, useEffect, useState } from 'react';
 import { Box, Grid, Paper, ThemeProvider, Typography } from '@mui/material';
-import { obterMedicao } from '@/api/database';
-import Grafico from '@/components/Grafico';
+import Image from 'next/image';
+import React, { useContext, useEffect, useState } from 'react';
+
 import { theme, tokens } from './theme';
+
+import { obterMedicao } from '@/api/database';
+import Footer from '@/components/Footer';
+import Grafico from '@/components/Grafico';
+import GraficoComp from '@/components/GraficoComp';
 import Navbar from '@/components/Navbar';
 import WeatherDisplay from '@/components/WeatherDisplay';
-import Footer from '@/components/Footer';
-import Image from 'next/image';
-import GraficoComp from '@/components/GraficoComp';
 
 const buttons = [
   {
@@ -33,11 +35,11 @@ const buttons = [
   }
 ];
 
-export default function Page() {
+export default function Page () {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData () {
       const result = await obterMedicao('semana');
       const hoje = new Date();
       const dia = hoje.getDate().toString().padStart(2, '0');

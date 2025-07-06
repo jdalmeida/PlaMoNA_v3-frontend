@@ -1,18 +1,19 @@
-import { enviaNovaSenha } from '@/api/user';
-import { tokens } from '@/app/theme';
 import { Box, Button, Input, CircularProgress } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
+
+import { enviaNovaSenha } from '@/api/user';
+import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function FormRecuperar() {
+export default function FormRecuperar () {
   const [codigo, setCodigo] = useState('');
   const [senha, setSenha] = useState('');
   const [confSenha, setConfSenha] = useState('');
   const [alterando, setAlterando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
 
-  async function fetchData() {
+  async function fetchData () {
     try {
       const resultado = await enviaNovaSenha(codigo, senha);
       showSuccess(resultado);

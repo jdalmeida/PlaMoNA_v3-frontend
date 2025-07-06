@@ -1,6 +1,4 @@
 'use client';
-import React from 'react';
-import { useState } from 'react';
 import {
   Box,
   Button,
@@ -11,11 +9,15 @@ import {
   ThemeProvider,
   Typography
 } from '@mui/material';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import Image from 'next/image';
+import { useState } from 'react';
+import React from 'react';
+
 import { theme, tokens } from '../theme';
+
+import Footer from '@/components/Footer';
 import FormConfiguracaoSensor from '@/components/FormConfiguracaoSensor.jsx';
+import Navbar from '@/components/Navbar';
 
 const buttons = [
   {
@@ -36,7 +38,7 @@ const buttons = [
   }
 ];
 
-export default function Page() {
+export default function Page () {
   return (
     <>
       <ThemeProvider theme={theme}>

@@ -1,21 +1,22 @@
-import { registerUser } from '@/api/user';
-import { tokens } from '@/app/theme';
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
+
+import { registerUser } from '@/api/user';
+import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
-function testaCPF(cpf) {
+function testaCPF (cpf) {
   cpf = cpf.replace(/\D/g, '');
   if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-  var result = true;
-  [9, 10].forEach(function (j) {
-    var soma = 0,
+  let result = true;
+  [9, 10].forEach((j) => {
+    let soma = 0,
       r;
     cpf
       .split(/(?=)/)
       .splice(0, j)
-      .forEach(function (e, i) {
+      .forEach((e, i) => {
         soma += parseInt(e) * (j + 2 - (i + 1));
       });
     r = soma % 11;
@@ -25,7 +26,7 @@ function testaCPF(cpf) {
   return result;
 }
 
-export default function Cadastro() {
+export default function Cadastro () {
   const [nome, setNome] = useState('');
   const [cpf, setCPF] = useState('');
   const [email, setEmail] = useState('');
@@ -41,7 +42,7 @@ export default function Cadastro() {
   const [cadastrando, setCadastrando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
 
-  async function fetchData() {
+  async function fetchData () {
     try {
       const resposta = await registerUser(
         nome,

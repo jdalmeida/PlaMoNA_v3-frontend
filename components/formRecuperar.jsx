@@ -1,17 +1,18 @@
-import { recuperarSenha } from '@/api/user';
-import { tokens } from '@/app/theme';
 import { Box, Button, Input, CircularProgress } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
+
+import { recuperarSenha } from '@/api/user';
+import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function FormRecuperar() {
+export default function FormRecuperar () {
   const [email, setEmail] = useState('');
   const [confEmail, setConfEmail] = useState('');
   const [enviando, setEnviando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
 
-  async function fetchData() {
+  async function fetchData () {
     try {
       const resultado = await recuperarSenha(email);
       showSuccess(resultado);

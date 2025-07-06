@@ -1,6 +1,6 @@
 import { ResponsiveLine } from '@nivo/line';
 
-export default function Grafico({ data }) {
+export default function Grafico ({ data }) {
   //console.log(data);
   return (
     <ResponsiveLine

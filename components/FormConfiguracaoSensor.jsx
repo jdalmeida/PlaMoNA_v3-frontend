@@ -1,13 +1,14 @@
-import { atualizaConfSensor, pesquisaSensores } from '@/api/user';
-import { tokens } from '@/app/theme';
 import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import React from 'react';
 import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+
+import { atualizaConfSensor, pesquisaSensores } from '@/api/user';
+import { tokens } from '@/app/theme';
 import { useNotification } from '@/hooks/useNotification';
 
-export default function FormConfiguracaoSensor() {
+export default function FormConfiguracaoSensor () {
   const sensores = [
     { label: 'Sensor do Grão Para', codigo: 1 },
     { label: 'Sensor de Olavo Bilack', codigo: 2 }
@@ -29,7 +30,7 @@ export default function FormConfiguracaoSensor() {
   const [pesquisando, setPesquisando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
 
-  async function fetchData() {
+  async function fetchData () {
     try {
       const resultado = await atualizaConfSensor(
         codValue,
@@ -49,7 +50,7 @@ export default function FormConfiguracaoSensor() {
     }
   }
 
-  async function fetchDataPesquisa() {
+  async function fetchDataPesquisa () {
     try {
       const resultado = await pesquisaSensores(codValue);
       setSensorBanco(resultado);

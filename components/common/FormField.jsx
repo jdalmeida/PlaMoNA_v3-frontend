@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, Input, FormHelperText, FormControlLabel, Checkbox } from '@mui/material';
+import React from 'react';
 
 export const FormField = ({
   label,

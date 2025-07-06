@@ -1,15 +1,16 @@
-import { loginUser } from '@/api/user';
-import { tokens } from '@/app/theme';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Input, CircularProgress, FormHelperText } from '@mui/material';
 import React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useNotification } from '@/hooks/useNotification';
+
+import { loginUser } from '@/api/user';
+import { tokens } from '@/app/theme';
 import { useUser } from '@/contexts/UserContext';
+import { useNotification } from '@/hooks/useNotification';
 import { loginSchema } from '@/utils/validations';
 
-export default function FormLogin() {
+export default function FormLogin () {
   const [logando, setLogando] = useState(false);
   const { showSuccess, showError, showWarning } = useNotification();
   const { login } = useUser();
@@ -24,7 +25,7 @@ export default function FormLogin() {
     mode: 'onChange'
   });
 
-  async function fetchData(data) {
+  async function fetchData (data) {
     try {
       const usuario = await loginUser(data.email, data.senha);
       if (usuario) {

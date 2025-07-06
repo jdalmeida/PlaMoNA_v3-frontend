@@ -6,15 +6,23 @@ import React, { useState } from 'react';
 
 import { trpc } from '@/utils/trpc';
 
-export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+export const TRPCProvider = ({ children }) => {
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        refetchOnWindowFocus: false
+      }
+    }
+  }));
+  
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: '/api/trpc',
-        }),
-      ],
+          url: '/api/trpc'
+        })
+      ]
     })
   );
 
@@ -23,4 +31,4 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </trpc.Provider>
   );
-} 
+};

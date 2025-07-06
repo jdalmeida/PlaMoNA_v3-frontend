@@ -1,9 +1,8 @@
-import { Menu as MenuIcon } from '@mui/icons-material';
+import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material';
 import {
   Button,
   Box,
   Typography,
-  Slide,
   Avatar,
   Menu,
   MenuItem,
@@ -12,7 +11,10 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemButton
+  ListItemButton,
+  AppBar,
+  Toolbar,
+  Container
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
@@ -67,12 +69,45 @@ const Navbar = ({ buttons = [], logo = null }) => {
   };
 
   const drawer = (
-    <Box sx={{ width: 250 }}>
-      <List>
+    <Box sx={{ width: 280, height: '100%' }}>
+      <Box
+        sx={{
+          p: 3,
+          borderBottom: `1px solid ${tokens.grey[200]}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
+        }}
+      >
+        {logo}
+        <IconButton onClick={handleDrawerToggle}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      
+      <List sx={{ pt: 2 }}>
         {buttons.map(button => (
-          <ListItem key={button.href} component='a' href={button.href} onClick={handleDrawerToggle}>
-            <ListItemButton>
-              <ListItemText primary={button.text} />
+          <ListItem key={button.href} disablePadding>
+            <ListItemButton
+              component='a'
+              href={button.href}
+              onClick={handleDrawerToggle}
+              sx={{
+                mx: 2,
+                borderRadius: 2,
+                mb: 1,
+                '&:hover': {
+                  backgroundColor: tokens.primary[600],
+                  color: tokens.primary[600]
+                }
+              }}
+            >
+              <ListItemText 
+                primary={button.text}
+                primaryTypographyProps={{
+                  fontWeight: 500
+                }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
@@ -83,99 +118,148 @@ const Navbar = ({ buttons = [], logo = null }) => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box
-          className='flex py-3 shadow-lg lg:px-40 md:px-10'
+        <AppBar
+          position="sticky"
+          elevation={0}
           sx={{
-            backgroundColor: tokens.primary[100] + '77',
-            flexDirection: { sm: 'row', xs: 'column' },
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            px: { xs: 2, sm: 3, md: 4, lg: 5 }
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            borderBottom: `1px solid ${tokens.grey[200]}`,
+            color: tokens.text.primary
           }}
         >
-          <Box
-            sx={{
-              color: tokens.text.primary,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2
-            }}
-            className='align-center justify-center p-3 lg:text-3xl md:text-lg'
-          >
-            <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='start'
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: 'none' } }}
-            >
-              <MenuIcon />
-            </IconButton>
-            {logo}
-          </Box>
-
-          {/* Desktop Navigation */}
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: { xs: 'none', sm: 'flex' },
-              gap: '.5em'
-            }}
-            className='align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2'
-          >
-            {buttons.map(button => (
-              <Button
-                variant='outlined'
-                size={'small'}
-                color='primary'
-                key={button.href}
-                href={button.href}
+          <Container maxWidth="xl">
+            <Toolbar sx={{ px: { xs: 0 } }}>
+              {/* Logo Section */}
+              <Box
                 sx={{
-                  fontSize: { sm: '0.75rem', md: '0.875rem' },
-                  px: { sm: 1, md: 2 }
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  flexGrow: { xs: 1, sm: 0 }
                 }}
               >
-                {button.text}
-              </Button>
-            ))}
-
-            {isAuthenticated() && (
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Avatar
+                <IconButton
+                  color='inherit'
+                  aria-label='open drawer'
+                  edge='start'
+                  onClick={handleDrawerToggle}
+                  sx={{ 
+                    mr: 2, 
+                    display: { sm: 'none' },
+                    color: tokens.primary[600]
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Box
                   sx={{
-                    bgcolor: tokens.primary[500],
-                    width: 32,
-                    height: 32,
-                    cursor: 'pointer'
-                  }}
-                  onClick={handleMenuClick}
-                >
-                  {user?.nome?.charAt(0)?.toUpperCase() || 'U'}
-                </Avatar>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'right'
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2
                   }}
                 >
-                  <MenuItem disabled>
-                    <Typography variant='body2' color='textSecondary'>
-                      Olá, {user?.nome}
-                    </Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>Sair</MenuItem>
-                </Menu>
+                  {logo}
+                </Box>
               </Box>
-            )}
-          </Box>
-        </Box>
+
+              {/* Desktop Navigation */}
+              <Box
+                sx={{
+                  display: { xs: 'none', sm: 'flex' },
+                  alignItems: 'center',
+                  gap: 2,
+                  flexGrow: 1,
+                  justifyContent: 'center'
+                }}
+              >
+                {buttons.map(button => (
+                  <Button
+                    key={button.href}
+                    href={button.href}
+                    variant='text'
+                    size='medium'
+                    sx={{
+                      color: tokens.text.primary,
+                      fontWeight: 500,
+                      px: 3,
+                      py: 1.5,
+                      borderRadius: 2,
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        backgroundColor: tokens.primary[50],
+                        color: tokens.primary[600],
+                        transform: 'translateY(-1px)'
+                      }
+                    }}
+                  >
+                    {button.text}
+                  </Button>
+                ))}
+              </Box>
+
+              {/* User Menu */}
+              {isAuthenticated() && (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: tokens.primary[500],
+                      width: 40,
+                      height: 40,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease-in-out',
+                      '&:hover': {
+                        transform: 'scale(1.05)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                      }
+                    }}
+                    onClick={handleMenuClick}
+                  >
+                    {user?.nome?.charAt(0)?.toUpperCase() || 'U'}
+                  </Avatar>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right'
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }}
+                    PaperProps={{
+                      sx: {
+                        mt: 1,
+                        borderRadius: 2,
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                        border: `1px solid ${tokens.grey[200]}`
+                      }
+                    }}
+                  >
+                    <MenuItem disabled sx={{ opacity: 0.7 }}>
+                      <Typography variant='body2' color='textSecondary'>
+                        Olá, {user?.nome}
+                      </Typography>
+                    </MenuItem>
+                    <MenuItem 
+                      onClick={handleLogout}
+                      sx={{
+                        '&:hover': {
+                          backgroundColor: tokens.error[50],
+                          color: tokens.error[600]
+                        }
+                      }}
+                    >
+                      Sair
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              )}
+            </Toolbar>
+          </Container>
+        </AppBar>
 
         {/* Mobile Drawer */}
         <Drawer
@@ -183,11 +267,16 @@ const Navbar = ({ buttons = [], logo = null }) => {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true // Better open performance on mobile.
+            keepMounted: true
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 }
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: 280,
+              background: 'rgba(255, 255, 255, 0.98)',
+              backdropFilter: 'blur(10px)'
+            }
           }}
         >
           {drawer}
@@ -198,28 +287,18 @@ const Navbar = ({ buttons = [], logo = null }) => {
           <Box
             sx={{
               display: 'flex',
-              backgroundColor: tokens.primary[800],
-              height: '2.3em',
-              flexDirection: { sm: 'row', xs: 'column' },
               justifyContent: 'center',
               alignItems: 'center',
-              px: { xs: 1, sm: 2 }
+              py: 2,
+              px: 3,
+              background: `linear-gradient(135deg, ${tokens.warning[50]} 0%, ${tokens.warning[100]} 100%)`,
+              borderBottom: `1px solid ${tokens.warning[200]}`,
+              color: tokens.warning[800]
             }}
           >
-            <Slide direction='left' in={true} mountOnEnter unmountOnExit>
-              <Typography
-                variant={`${theme.breakpoints.down('md') ? 'body2' : 'body1'}`}
-                color={'#fff'}
-                textAlign={'center'}
-                maxHeight={'2em'}
-                overflow={'hidden'}
-                whiteSpace={'nowrap'}
-                textOverflow={'ellipsis'}
-                sx={{ px: { xs: 1, sm: 2 } }}
-              >
-                Registre-se para receber alertas de cheia ou inundação!
-              </Typography>
-            </Slide>
+            <Typography variant='body2' sx={{ textAlign: 'center', fontWeight: 500 }}>
+              Faça login para acessar todas as funcionalidades do sistema
+            </Typography>
           </Box>
         )}
       </ThemeProvider>

@@ -12,4 +12,4 @@ export const appRouter = createTRPCRouter({
   clima: climaRouter
 });
 
-export type AppRouter = typeof appRouter; 
+export type AppRouter = typeof appRouter;

@@ -11,13 +11,13 @@ const getBackendUrl = () => {
 
   const env = getEnvironment();
   switch (env) {
-  case 'production':
-    return process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL || 'https://plamona-q3aj.onrender.com';
-  case 'staging':
-    return process.env.NEXT_PUBLIC_STAGING_BACKEND_URL || 'https://plamona-q3aj.onrender.com';
-  case 'development':
-  default:
-    return 'https://plamona-q3aj.onrender.com';
+    case 'production':
+      return process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL || 'https://plamona-q3aj.onrender.com';
+    case 'staging':
+      return process.env.NEXT_PUBLIC_STAGING_BACKEND_URL || 'https://plamona-q3aj.onrender.com';
+    case 'development':
+    default:
+      return 'https://plamona-q3aj.onrender.com';
   }
 };
 

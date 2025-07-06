@@ -1,5 +1,10 @@
 import { trpc } from '@/utils/trpc';
 
+// Hook de teste
+export const useTest = () => {
+  return trpc.medicao.test.useQuery();
+};
+
 // Hooks para usuários
 export const useRegisterUser = () => {
   return trpc.user.register.useMutation();
@@ -88,4 +93,4 @@ export const useGetClima = () => {
 
 export const useGetPrevisao = () => {
   return trpc.clima.getPrevisao.useQuery();
-}; 
+};

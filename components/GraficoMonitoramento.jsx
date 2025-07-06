@@ -3,7 +3,7 @@ import { ResponsiveLine } from '@nivo/line';
 
 import { tokens } from '@/app/theme';
 
-const Grafico = ({ data }) => {
+const GraficoMonitoramento = ({ data }) => {
   
   // Validar se os dados estão no formato correto
   if (!data || !Array.isArray(data) || data.length === 0) {
@@ -459,4 +459,4 @@ const Grafico = ({ data }) => {
   );
 };
 
-export default Grafico;
+export default GraficoMonitoramento; 

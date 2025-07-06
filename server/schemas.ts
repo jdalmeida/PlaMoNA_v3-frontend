@@ -73,4 +73,4 @@ export type PesquisaSensoresInput = z.infer<typeof pesquisaSensoresSchema>;
 export type ValidateCodigoInput = z.infer<typeof validateCodigoSchema>;
 export type ObterMedicaoInput = z.infer<typeof obterMedicaoSchema>;
 export type ObterComparacaoInput = z.infer<typeof obterComparacaoSchema>;
-export type ObterDiaInput = z.infer<typeof obterDiaSchema>; 
+export type ObterDiaInput = z.infer<typeof obterDiaSchema>;

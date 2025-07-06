@@ -1,7 +1,8 @@
 import { initTRPC, TRPCError } from '@trpc/server';
 import { type FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { prisma } from '@/server/db';
 import { verify } from 'jsonwebtoken';
+
+import { prisma } from '@/server/db';
 
 interface CreateContextOptions {
   session: any | null;
@@ -10,17 +11,17 @@ interface CreateContextOptions {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    prisma,
+    prisma
   };
 };
 
 export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
   const { req } = opts;
-  
+
   // Extrair token do header Authorization
   const authHeader = req.headers.get('authorization');
   let session = null;
-  
+
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.substring(7);
     try {
@@ -33,30 +34,25 @@ export const createTRPCContext = async (opts: FetchCreateContextFnOptions) => {
   }
 
   return createInnerTRPCContext({
-    session,
+    session
   });
 };
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: {
-    serialize: (object) => JSON.parse(JSON.stringify(object)),
-    deserialize: (object) => object,
-  },
-});
+const trpc = initTRPC.context<typeof createTRPCContext>().create();
 
-export const createTRPCRouter = t.router;
-export const publicProcedure = t.procedure;
+export const createTRPCRouter = trpc.router;
+export const publicProcedure = trpc.procedure;
 
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
+const enforceUserIsAuthed = trpc.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
   return next({
     ctx: {
       ...ctx,
-      session: { ...ctx.session, user: ctx.session.user },
-    },
+      session: { ...ctx.session, user: ctx.session.user }
+    }
   });
 });
 
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed); 
+export const protectedProcedure = trpc.procedure.use(enforceUserIsAuthed);

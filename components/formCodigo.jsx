@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useNotification } from '@/hooks/useNotification';
 import { useValidateCodigo } from '@/hooks/useTRPC';
 
-export default function FormCodigo () {
+export default function FormCodigo() {
   const [codigo, setCodigo] = useState('');
   const { showSuccess, showError } = useNotification();
   const validateMutation = useValidateCodigo();
@@ -30,7 +30,12 @@ export default function FormCodigo () {
         onChange={event => setCodigo(event.target.value)}
         placeholder='Digite o código'
       />
-      <Button type='submit' disabled={validateMutation.isLoading} variant='contained' color='primary'>
+      <Button
+        type='submit'
+        disabled={validateMutation.isLoading}
+        variant='contained'
+        color='primary'
+      >
         {validateMutation.isLoading ? <CircularProgress size={24} /> : 'Validar Código'}
       </Button>
     </Box>

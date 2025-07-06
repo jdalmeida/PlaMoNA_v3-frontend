@@ -9,7 +9,7 @@ export const obterMedicao = async periodo => {
     return response.data;
   } catch (error) {
     console.error('Erro ao obter dados:', error);
-    
+
     // Verificar se é um erro de rede ou servidor
     if (error.response) {
       // Erro de resposta do servidor
@@ -38,7 +38,7 @@ export const obterComparacao = async (periodo, comp1, comp2) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao obter dados de comparação:', error);
-    
+
     if (error.response) {
       const status = error.response.status;
       const message = error.response.data?.message || 'Erro no servidor';
@@ -52,7 +52,7 @@ export const obterComparacao = async (periodo, comp1, comp2) => {
 };
 
 //Função para obter dia
-//Periodo pode ser "dia" ou "diaEsp" <- "dia" pega do dia atual, e "diaEsp" pega de qualquer dia 
+//Periodo pode ser "dia" ou "diaEsp" <- "dia" pega do dia atual, e "diaEsp" pega de qualquer dia
 // (usado no gráfico com flechinha)
 export const obterDia = async (periodo, comp1) => {
   try {
@@ -64,7 +64,7 @@ export const obterDia = async (periodo, comp1) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao obter dados do dia:', error);
-    
+
     if (error.response) {
       const status = error.response.status;
       const message = error.response.data?.message || 'Erro no servidor';

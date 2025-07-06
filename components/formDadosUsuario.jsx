@@ -280,7 +280,11 @@ const DadosUsuario = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarAlteracao} disabled={updateMutation.isLoading}>
+            <Button
+              variant='contained'
+              onClick={efetuarAlteracao}
+              disabled={updateMutation.isLoading}
+            >
               {updateMutation.isLoading ? <CircularProgress size={20} /> : 'Atualizar Dados'}
             </Button>
           </Box>

@@ -1,6 +1,7 @@
 # TODO - Migração para tRPC
 
 ## ✅ Concluído
+
 - [x] Análise da estrutura atual do projeto
 - [x] Identificação das dependências necessárias
 - [x] Instalação das dependências do tRPC
@@ -25,21 +26,25 @@
 - [x] Adição de router para atualização de dados do usuário
 
 ## 🔄 Em Progresso
+
 - [ ] Testes das funcionalidades
 - [ ] Otimizações finais
 
 ## 📋 Pendente
+
 - [ ] Testes de integração
 - [ ] Documentação das mudanças
 - [ ] Deploy e validação em produção
 
 ## 🐛 Problemas Identificados
+
 - Necessário manter compatibilidade com o schema existente do banco
 - Migração gradual para não quebrar funcionalidades existentes
 
 ## 📝 Notas
+
 - Manter o schema do banco de dados inalterado
 - Usar Prisma Client para conexão direta com o banco
 - Implementar validação de dados com Zod
 - Manter a estrutura de autenticação existente
-- Migração 100% concluída! 🎉 
+- Migração 100% concluída! 🎉

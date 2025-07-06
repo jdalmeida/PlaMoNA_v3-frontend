@@ -2,50 +2,45 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { prisma } from '@/server/db';
-import {
-  configuracaoSensorSchema,
-  pesquisaSensoresSchema
-} from '@/server/schemas';
+import { configuracaoSensorSchema, pesquisaSensoresSchema } from '@/server/schemas';
 import { createTRPCRouter, publicProcedure, protectedProcedure } from '@/server/trpc';
 
 export const sensorRouter = createTRPCRouter({
   // Pesquisar sensores
-  pesquisaSensores: publicProcedure
-    .input(pesquisaSensoresSchema)
-    .query(async ({ input }) => {
-      try {
-        const whereClause = input.idSensor ? { id_sensor: input.idSensor } : {};
+  pesquisaSensores: publicProcedure.input(pesquisaSensoresSchema).query(async ({ input }) => {
+    try {
+      const whereClause = input.idSensor ? { id_sensor: input.idSensor } : {};
 
-        const sensores = await prisma.sensor.findMany({
-          where: whereClause,
-          include: {
-            rio_alvo: {
-              include: {
-                cid_alvo: true
-              }
-            },
-            cad_niveis: true,
-            usuario: {
-              select: {
-                id_usuario: true,
-                nome: true,
-                email: true
-              }
+      const sensores = await prisma.sensor.findMany({
+        where: whereClause,
+        include: {
+          rio_alvo: {
+            include: {
+              cid_alvo: true
+            }
+          },
+          cad_niveis: true,
+          usuario: {
+            select: {
+              id_usuario: true,
+              nome: true,
+              email: true
             }
           }
-        });
+        }
+      });
 
-        return {
-          success: true,
-          data: sensores
-        };
-      } catch (error) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Erro ao pesquisar sensores'
-        });
-      }
-    }),
+      return {
+        success: true,
+        data: sensores
+      };
+    } catch (error) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Erro ao pesquisar sensores'
+      });
+    }
+  }),
 
   // Atualizar configuração do sensor
   atualizaConfSensor: protectedProcedure
@@ -146,4 +141,4 @@ export const sensorRouter = createTRPCRouter({
         });
       }
     })
-}); 
+});

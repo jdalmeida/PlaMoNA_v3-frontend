@@ -1,16 +1,6 @@
 {
   "extends": ["next/core-web-vitals", "eslint:recommended"],
   "rules": {
-    // Nomenclatura
-    "camelcase": ["error", { "properties": "always" }],
-    "func-names": ["error", "always"],
-    "func-style": ["error", "expression"],
-    "id-length": ["error", { "min": 2, "exceptions": ["i", "j", "k", "x", "y", "z"] }],
-    "max-len": ["error", { "code": 100, "ignoreUrls": true, "ignoreStrings": true }],
-    "new-cap": ["error", { "newIsCap": true, "capIsNew": false }],
-    "no-underscore-dangle": "error",
-    "prefer-const": "error",
-
     // Componentes React
     "react/jsx-pascal-case": "error",
     "react/jsx-no-bind": ["error", { "allowArrowFunctions": true }],

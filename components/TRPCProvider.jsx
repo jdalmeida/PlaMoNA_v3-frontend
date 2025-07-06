@@ -6,15 +6,15 @@ import React, { useState } from 'react';
 
 import { trpc } from '@/utils/trpc';
 
-export function TRPCProvider({ children }: { children: React.ReactNode }) {
+export const TRPCProvider = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: '/api/trpc',
-        }),
-      ],
+          url: '/api/trpc'
+        })
+      ]
     })
   );
 
@@ -23,4 +23,4 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </trpc.Provider>
   );
-} 
+};

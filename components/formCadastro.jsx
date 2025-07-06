@@ -328,7 +328,11 @@ const Cadastro = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarCadastro} disabled={registerMutation.isLoading}>
+            <Button
+              variant='contained'
+              onClick={efetuarCadastro}
+              disabled={registerMutation.isLoading}
+            >
               {registerMutation.isLoading ? <CircularProgress size={20} /> : 'Cadastrar'}
             </Button>
           </Box>

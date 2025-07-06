@@ -124,7 +124,11 @@ const FormConfiguracaoSensor = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarPesquisa} disabled={pesquisaQuery.isLoading}>
+            <Button
+              variant='contained'
+              onClick={efetuarPesquisa}
+              disabled={pesquisaQuery.isLoading}
+            >
               {pesquisaQuery.isLoading ? <CircularProgress size={20} /> : 'Pesquisar Sensor'}
             </Button>
           </Box>
@@ -285,7 +289,11 @@ const FormConfiguracaoSensor = () => {
               justifyContent: 'center'
             }}
           >
-            <Button variant='contained' onClick={efetuarConfigurar} disabled={atualizaMutation.isLoading}>
+            <Button
+              variant='contained'
+              onClick={efetuarConfigurar}
+              disabled={atualizaMutation.isLoading}
+            >
               {atualizaMutation.isLoading ? <CircularProgress size={20} /> : 'Configurar Sensor'}
             </Button>
           </Box>

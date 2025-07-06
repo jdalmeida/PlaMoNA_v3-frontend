@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useNotification } from '@/hooks/useNotification';
 import { useLoginUser } from '@/hooks/useTRPC';
 
-export default function FormLogin () {
+export default function FormLogin() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const { showSuccess, showError } = useNotification();

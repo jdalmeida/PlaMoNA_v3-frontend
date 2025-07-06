@@ -111,7 +111,7 @@ export const pesquisaSensores = async idSensor => {
   }
 };
 
-export const validateCodigo = async (codigo) => {
+export const validateCodigo = async codigo => {
   try {
     const response = await axios.post(`${config.backend.url}/validateCodigo`, { codigo });
     return response.data.valid;

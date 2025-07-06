@@ -11,13 +11,13 @@ const getBackendUrl = () => {
 
   const env = getEnvironment();
   switch (env) {
-    case 'production':
-      return process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL || 'https://api.plamona.com';
-    case 'staging':
-      return process.env.NEXT_PUBLIC_STAGING_BACKEND_URL || 'https://staging-api.plamona.com';
-    case 'development':
-    default:
-      return 'http://127.0.0.1:4000';
+  case 'production':
+    return process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL || 'https://api.plamona.com';
+  case 'staging':
+    return process.env.NEXT_PUBLIC_STAGING_BACKEND_URL || 'https://staging-api.plamona.com';
+  case 'development':
+  default:
+    return 'http://127.0.0.1:4000';
   }
 };
 
@@ -59,17 +59,17 @@ export const config = {
 };
 
 // Validação de configuração obrigatória
-export function validateConfig() {
+export const validateConfig = () => {
   const requiredVars = [
     { key: 'NEXT_PUBLIC_WEATHER_API_KEY', value: config.weather.apiKey },
     { key: 'NEXT_PUBLIC_BACKEND_URL', value: config.backend.url }
   ];
 
-  const missing = requiredVars.filter(v => !v.value);
+  const missing = requiredVars.filter((variable) => !variable.value);
 
   if (missing.length > 0) {
     const errorMessage =
-      `Variáveis de ambiente obrigatórias não configuradas: ${missing.map(v => v.key).join(', ')}. ` +
+      `Variáveis de ambiente obrigatórias não configuradas: ${missing.map((variable) => variable.key).join(', ')}. ` +
       'Configure estas variáveis no arquivo .env.local';
 
     if (config.app.isDevelopment) {
@@ -78,30 +78,12 @@ export function validateConfig() {
       throw new Error(errorMessage);
     }
   }
-}
-
-// Função para obter configuração específica do ambiente
-export function getConfigForEnvironment(env) {
-  const originalEnv = process.env.NODE_ENV;
-  process.env.NODE_ENV = env;
-
-  const envConfig = {
-    weather: {
-      apiKey: getWeatherApiKey(),
-      baseUrl: 'https://api.weatherapi.com/v1'
-    },
-    backend: {
-      url: getBackendUrl()
-    }
-  };
-
-  process.env.NODE_ENV = originalEnv;
-  return envConfig;
-}
+};
 
 // Função para debug da configuração (apenas em desenvolvimento)
-export function debugConfig() {
+export const debugConfig = () => {
   if (config.app.isDevelopment) {
+    // eslint-disable-next-line no-console
     console.log('🔧 Configuração atual:', {
       environment: config.app.environment,
       backendUrl: config.backend.url,
@@ -109,4 +91,4 @@ export function debugConfig() {
       features: config.features
     });
   }
-}
+};

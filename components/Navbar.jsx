@@ -11,8 +11,7 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText,
-  ListItemButton
+  ListItemText
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
@@ -24,7 +23,7 @@ import { useNotification } from '@/hooks/useNotification';
 const theme = createTheme({
   palette: {
     primary: {
-      main: tokens.grey[900]
+      main: tokens.primary[600]
     }
   },
   breakpoints: {
@@ -38,13 +37,13 @@ const theme = createTheme({
   }
 });
 
-export default function Navbar({ buttons, logo }) {
+export default function Navbar ({ buttons, logo }) {
   const { user, logout, isAuthenticated } = useUser();
   const { showSuccess } = useNotification();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const handleMenuClick = event => {
+  const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -69,11 +68,9 @@ export default function Navbar({ buttons, logo }) {
   const drawer = (
     <Box sx={{ width: 250 }}>
       <List>
-        {buttons.map(button => (
-          <ListItem key={button.text} component='a' href={button.href} onClick={handleDrawerToggle}>
-            <ListItemButton>
-              <ListItemText primary={button.text} />
-            </ListItemButton>
+        {buttons.map((button, index) => (
+          <ListItem button key={index} component="a" href={button.href} onClick={handleDrawerToggle}>
+            <ListItemText primary={button.text} />
           </ListItem>
         ))}
       </List>
@@ -84,9 +81,9 @@ export default function Navbar({ buttons, logo }) {
     <>
       <ThemeProvider theme={theme}>
         <Box
-          className='flex py-3 shadow-lg lg:px-40 md:px-10'
+          className="flex py-3 shadow-lg lg:px-40 md:px-10"
           sx={{
-            backgroundColor: tokens.blueAccent[300] + '77',
+            backgroundColor: tokens.primary[100] + '77',
             flexDirection: { sm: 'row', xs: 'column' },
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -95,17 +92,17 @@ export default function Navbar({ buttons, logo }) {
         >
           <Box
             sx={{
-              color: tokens.grey[900],
+              color: tokens.text.primary,
               display: 'flex',
               alignItems: 'center',
               gap: 2
             }}
-            className='align-center justify-center p-3 lg:text-3xl md:text-lg'
+            className="align-center justify-center p-3 lg:text-3xl md:text-lg"
           >
             <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='start'
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
               onClick={handleDrawerToggle}
               sx={{ mr: 2, display: { sm: 'none' } }}
             >
@@ -121,14 +118,14 @@ export default function Navbar({ buttons, logo }) {
               display: { xs: 'none', sm: 'flex' },
               gap: '.5em'
             }}
-            className='align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2'
+            className="align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2"
           >
-            {buttons.map(button => (
+            {buttons.map((button, index) => (
               <Button
-                variant='outlined'
+                variant="outlined"
                 size={'small'}
-                color='primary'
-                key={button.text}
+                color="primary"
+                key={index}
                 href={button.href}
                 sx={{
                   fontSize: { sm: '0.75rem', md: '0.875rem' },
@@ -143,7 +140,7 @@ export default function Navbar({ buttons, logo }) {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Avatar
                   sx={{
-                    bgcolor: tokens.blueAccent[500],
+                    bgcolor: tokens.primary[500],
                     width: 32,
                     height: 32,
                     cursor: 'pointer'
@@ -166,7 +163,7 @@ export default function Navbar({ buttons, logo }) {
                   }}
                 >
                   <MenuItem disabled>
-                    <Typography variant='body2' color='textSecondary'>
+                    <Typography variant="body2" color="textSecondary">
                       Olá, {user?.nome}
                     </Typography>
                   </MenuItem>
@@ -179,7 +176,7 @@ export default function Navbar({ buttons, logo }) {
 
         {/* Mobile Drawer */}
         <Drawer
-          variant='temporary'
+          variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
@@ -198,7 +195,7 @@ export default function Navbar({ buttons, logo }) {
           <Box
             sx={{
               display: 'flex',
-              backgroundColor: tokens.blueAccent[900],
+              backgroundColor: tokens.primary[800],
               height: '2.3em',
               flexDirection: { sm: 'row', xs: 'column' },
               justifyContent: 'center',
@@ -206,7 +203,7 @@ export default function Navbar({ buttons, logo }) {
               px: { xs: 1, sm: 2 }
             }}
           >
-            <Slide direction='left' in={true} mountOnEnter unmountOnExit>
+            <Slide direction="left" in={true} mountOnEnter unmountOnExit>
               <Typography
                 variant={`${theme.breakpoints.down('md') ? 'body2' : 'body1'}`}
                 color={'#fff'}

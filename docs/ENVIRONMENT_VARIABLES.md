@@ -11,21 +11,26 @@ Este documento descreve as variáveis de ambiente necessárias para executar o p
 ## Variáveis Obrigatórias
 
 ### Backend
+
 - `NEXT_PUBLIC_BACKEND_URL`: URL do backend (ex: `http://127.0.0.1:4000`)
 
 ### API de Clima
+
 - `NEXT_PUBLIC_WEATHER_API_KEY`: Chave da API WeatherAPI.com
 
 ## Variáveis Opcionais
 
 ### URLs por Ambiente
+
 - `NEXT_PUBLIC_PRODUCTION_BACKEND_URL`: URL do backend em produção
 - `NEXT_PUBLIC_STAGING_BACKEND_URL`: URL do backend em staging
 
 ### Analytics
+
 - `NEXT_PUBLIC_ANALYTICS_ID`: ID do Google Analytics
 
 ### Debug
+
 - `NEXT_PUBLIC_DEBUG_MODE`: Habilita modo debug (true/false)
 
 ## Exemplo de Configuração
@@ -50,4 +55,4 @@ O sistema valida automaticamente as variáveis obrigatórias na inicialização.
 
 ## Segurança
 
-⚠️ **Importante**: Nunca commite o arquivo `.env.local` no repositório. Ele contém informações sensíveis. 
+⚠️ **Importante**: Nunca commite o arquivo `.env.local` no repositório. Ele contém informações sensíveis.

@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-    transition: ease-in-out all 30ms;
+* {
+  transition: ease-in-out all 30ms;
 }

@@ -1,290 +1,290 @@
 [
-    {
-        "code": 1000,
-        "day": "CLEAR_DAY",
-        "night": "CLEAR_NIGHT",
-        "icon": "CLEAR_DAY"
-    },
-    {
-        "code": 1003,
-        "day": "PARTLY_CLOUDY_DAY",
-        "night": "PARTLY_CLOUDY_NIGHT",
-        "icon": "PARTLY_CLOUDY_DAY"
-    },
-    {
-        "code": 1006,
-        "day": "CLOUDY",
-        "night": "CLOUDY",
-        "icon": "CLOUDY"
-    },
-    {
-        "code": 1009,
-        "day": "Overcast",
-        "night": "Overcast",
-        "icon": "CLOUDY"
-    },
-    {
-        "code": 1030,
-        "day": "Mist",
-        "night": "Mist",
-        "icon": "FOG"
-    },
-    {
-        "code": 1063,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1066,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1069,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1072,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1087,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1114,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1117,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1135,
-        "day": "FOG",
-        "night": "FOG",
-        "icon": "FOG"
-    },
-    {
-        "code": 1147,
-        "day": "FOG",
-        "night": "FOG",
-        "icon": "FOG"
-    },
-    {
-        "code": 1150,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1153,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1168,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1171,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1180,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1183,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1186,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1189,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1192,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1195,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1198,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1201,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1204,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1207,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1210,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1213,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1216,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1219,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1222,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1225,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1237,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1240,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1243,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1246,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1249,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1252,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1255,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1258,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    },
-    {
-        "code": 1261,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1264,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1273,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1276,
-        "day": "RAIN",
-        "night": "RAIN",
-        "icon": "RAIN"
-    },
-    {
-        "code": 1279,
-        "day": "SLEET",
-        "night": "SLEET",
-        "icon": "SLEET"
-    },
-    {
-        "code": 1282,
-        "day": "SNOW",
-        "night": "SNOW",
-        "icon": "SNOW"
-    }
+  {
+    "code": 1000,
+    "day": "CLEAR_DAY",
+    "night": "CLEAR_NIGHT",
+    "icon": "CLEAR_DAY"
+  },
+  {
+    "code": 1003,
+    "day": "PARTLY_CLOUDY_DAY",
+    "night": "PARTLY_CLOUDY_NIGHT",
+    "icon": "PARTLY_CLOUDY_DAY"
+  },
+  {
+    "code": 1006,
+    "day": "CLOUDY",
+    "night": "CLOUDY",
+    "icon": "CLOUDY"
+  },
+  {
+    "code": 1009,
+    "day": "Overcast",
+    "night": "Overcast",
+    "icon": "CLOUDY"
+  },
+  {
+    "code": 1030,
+    "day": "Mist",
+    "night": "Mist",
+    "icon": "FOG"
+  },
+  {
+    "code": 1063,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1066,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1069,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1072,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1087,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1114,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1117,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1135,
+    "day": "FOG",
+    "night": "FOG",
+    "icon": "FOG"
+  },
+  {
+    "code": 1147,
+    "day": "FOG",
+    "night": "FOG",
+    "icon": "FOG"
+  },
+  {
+    "code": 1150,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1153,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1168,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1171,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1180,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1183,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1186,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1189,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1192,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1195,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1198,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1201,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1204,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1207,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1210,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1213,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1216,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1219,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1222,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1225,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1237,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1240,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1243,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1246,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1249,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1252,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1255,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1258,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  },
+  {
+    "code": 1261,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1264,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1273,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1276,
+    "day": "RAIN",
+    "night": "RAIN",
+    "icon": "RAIN"
+  },
+  {
+    "code": 1279,
+    "day": "SLEET",
+    "night": "SLEET",
+    "icon": "SLEET"
+  },
+  {
+    "code": 1282,
+    "day": "SNOW",
+    "night": "SNOW",
+    "icon": "SNOW"
+  }
 ]

@@ -3,11 +3,7 @@ import { validateCPF, loginSchema, cadastroSchema } from '@/utils/validations';
 describe('Validations', () => {
   describe('validateCPF', () => {
     it('should return true for valid CPF', () => {
-      const validCPFs = [
-        '123.456.789-09',
-        '111.444.777-35',
-        '12345678909'
-      ];
+      const validCPFs = ['123.456.789-09', '111.444.777-35', '12345678909'];
 
       validCPFs.forEach(cpf => {
         expect(validateCPF(cpf)).toBe(true);
@@ -88,4 +84,4 @@ describe('Validations', () => {
       await expect(cadastroSchema.validate(invalidData)).rejects.toThrow();
     });
   });
-}); 
+});

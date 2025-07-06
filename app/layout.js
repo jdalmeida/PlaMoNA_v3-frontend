@@ -1,19 +1,19 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { UserProvider } from '@/contexts/UserContext'
+import './globals.css';
+import { Inter } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { UserProvider } from '@/contexts/UserContext';
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'PlaMoNA',
-  description: 'Plataforma de monitoramento do nível das águas.',
-}
+  description: 'Plataforma de monitoramento do nível das águas.'
+};
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-br">
+    <html lang='pt-br'>
       <body className={inter.className}>
         <UserProvider>
           {children}
@@ -21,5 +21,5 @@ export default function RootLayout({ children }) {
         </UserProvider>
       </body>
     </html>
-  )
+  );
 }

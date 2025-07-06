@@ -15,7 +15,7 @@ export const tokens = {
     800: '#424242',
     900: '#212121'
   },
-  
+
   // Cores primárias (azul)
   primary: {
     50: '#e3f2fd',
@@ -29,7 +29,7 @@ export const tokens = {
     800: '#1565c0',
     900: '#0d47a1'
   },
-  
+
   // Cores secundárias (verde)
   secondary: {
     50: '#e8f5e8',
@@ -43,7 +43,7 @@ export const tokens = {
     800: '#2e7d32',
     900: '#1b5e20'
   },
-  
+
   // Cores de alerta
   warning: {
     50: '#fff8e1',
@@ -57,7 +57,7 @@ export const tokens = {
     800: '#ff8f00',
     900: '#ff6f00'
   },
-  
+
   error: {
     50: '#ffebee',
     100: '#ffcdd2',
@@ -70,7 +70,7 @@ export const tokens = {
     800: '#c62828',
     900: '#b71c1c'
   },
-  
+
   success: {
     50: '#e8f5e8',
     100: '#c8e6c9',
@@ -83,7 +83,7 @@ export const tokens = {
     800: '#2e7d32',
     900: '#1b5e20'
   },
-  
+
   // Cores de fundo
   background: {
     default: '#fafafa',
@@ -91,7 +91,7 @@ export const tokens = {
     dark: '#121212',
     darkPaper: '#1e1e1e'
   },
-  
+
   // Cores de texto
   text: {
     primary: '#212121',

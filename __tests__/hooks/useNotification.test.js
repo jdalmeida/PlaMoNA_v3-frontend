@@ -61,4 +61,4 @@ describe('useNotification', () => {
 
     expect(toast.info).toHaveBeenCalledWith('Info message');
   });
-}); 
+});

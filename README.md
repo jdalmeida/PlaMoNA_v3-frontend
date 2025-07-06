@@ -25,19 +25,21 @@ Sistema de monitoramento em tempo real de níveis de água em rios e córregos, 
 
 ## 📋 Pré-requisitos
 
-- Node.js 18+ 
+- Node.js 18+
 - npm ou yarn
 - Backend PlaMoNA rodando na porta 4000
 
 ## ⚙️ Configuração
 
 ### 1. Clone o repositório
+
 ```bash
 git clone <url-do-repositorio>
 cd PlaMoNA_v3-frontend
 ```
 
 ### 2. Instale as dependências
+
 ```bash
 npm install
 # ou
@@ -59,7 +61,8 @@ NEXT_PUBLIC_BACKEND_URL=http://127.0.0.1:4000
 NODE_ENV=development
 ```
 
-**⚠️ Importante:** 
+**⚠️ Importante:**
+
 - Obtenha sua API key gratuita em [WeatherAPI.com](https://www.weatherapi.com/)
 - Nunca commite o arquivo `.env.local` no repositório
 - O arquivo `.env.local` já está no `.gitignore`

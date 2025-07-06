@@ -1,23 +1,26 @@
 import { loginUser } from "@/api/user";
 import { tokens } from "@/app/theme";
-import { Box, Button, Input} from "@mui/material";
+import { Box, Button, Input, CircularProgress } from "@mui/material";
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import axios from "axios";
+import { useNotification } from '@/hooks/useNotification';
 
 export default function FormLogin(){
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [user, setUser] = useState(null);
     const [logando, setLogando] = useState(false);
+    const { showSuccess, showError, showWarning } = useNotification();
     
-        async function fetchData() {
+    async function fetchData() {
+        try {
             const usuario = await loginUser(email, senha);
             setUser(usuario);
+        } catch (error) {
+            showError(error.message);
+            setLogando(false);
         }
-    
-        
-
+    }
 
     const efetuarLogin = () => {
         if(!logando){
@@ -26,9 +29,8 @@ export default function FormLogin(){
                 fetchData();
                 setTimeout(function() {
                     if(user!=null){
-                        do{
-                        alert("Logado com sucesso!");
-                        console.log(user);
+                        showSuccess("Logado com sucesso!");
+                        
                         localStorage.setItem("userName", user.nome);
                         localStorage.setItem("userMail", user.email);
                         localStorage.setItem("userCPF", user.cpf);
@@ -37,19 +39,20 @@ export default function FormLogin(){
                         localStorage.setItem("userAlertaSms", user.alerta_sms);
                         localStorage.setItem("userAlertaEmail", user.alerta_email);
                         localStorage.setItem("userAcess", user.acesso);
-                        } while(user==undefined);
+                        
                         setUser(null);
                     }else{
-                        alert('Email ou senha incorretos');
+                        showError('Email ou senha incorretos');
                     }
                     setLogando(false);
                     
                 }, 500);
             }else{
-                alert("E-mail inválido");
+                showWarning("E-mail inválido");
+                setLogando(false);
             }
         }else{
-            alert('logando, aguarde');
+            showWarning('Logando, aguarde...');
         }
     };
 
@@ -67,7 +70,7 @@ export default function FormLogin(){
                             margin: '1em',
                             backgroundColor: tokens.primary[600]+"88",
                             borderRadius: '2em',
-                    }}>
+                        }}>
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -76,19 +79,12 @@ export default function FormLogin(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        E-mail: <br/>
-                        <Input  
-                            name='email' 
-                            pattern="email" 
-                            placeholder='exemplo@exemplo.com'
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                        </label>
+                            <label margin='1px'>
+                            E-mail: <br/><Input name='email' id='emailID' 
+                            onChange={e => setEmail(e.target.value)}/>
+                            </label>
                         </Box>
-
                         
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -97,35 +93,26 @@ export default function FormLogin(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        Senha: <br/>
-                        <Input 
-                            type='password'
-                            onChange={e => setSenha(e.target.value)}
-                        />
-
-                        </label>
+                            <label>
+                            Senha: <br/><Input name='senha' id='senhaID' type='password'
+                            onChange={e => setSenha(e.target.value)}/>
+                            </label>
                         </Box>
-
+                        
                         <Box sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                            }}>
-                            <Box sx={{
-                                padding: '.5em',
-                                margin: '1em',
-                                borderRadius: '2em',
-                                backgroundColor: tokens.primary[400],
-                            }}>
-                                <Button onClick={efetuarLogin}>Login</Button>
-                            </Box>
-                            </Box>
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <Button variant='contained' onClick={efetuarLogin} disabled={logando}>
+                                {logando ? <CircularProgress size={20} /> : 'Entrar'}
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
         </>
-    )
+    );
 }

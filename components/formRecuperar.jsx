@@ -1,27 +1,33 @@
 import { recuperarSenha } from "@/api/user";
 import { tokens } from "@/app/theme";
-import { Box, Button, Input} from "@mui/material";
+import { Box, Button, Input, CircularProgress } from "@mui/material";
 import React from 'react';
 import { useState } from 'react';
-import axios from "axios";
+import { useNotification } from '@/hooks/useNotification';
 
 export default function FormRecuperar(){
     const [email, setEmail] = useState("");
     const [confEmail, setConfEmail] = useState("");
+    const [enviando, setEnviando] = useState(false);
+    const { showSuccess, showError, showWarning } = useNotification();
 
     async function fetchData() {
-        alert(await recuperarSenha(email));
+        try {
+            const resultado = await recuperarSenha(email);
+            showSuccess(resultado);
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            setEnviando(false);
+        }
     }
 
     const efetuarRecuperacao = () => {
         if(email.match('@') && email==confEmail){
-            console.log("Enviando email");
-            
-            setTimeout(function() {
-                fetchData();
-            }, 200);
+            setEnviando(true);
+            fetchData();
         }else{
-            alert("Email inválido ou não compátivel");
+            showWarning("Email inválido ou não compatível");
         }
     };
 
@@ -39,7 +45,7 @@ export default function FormRecuperar(){
                             margin: '1em',
                             backgroundColor: tokens.primary[600]+"88",
                             borderRadius: '2em',
-                    }}>
+                        }}>
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -49,17 +55,16 @@ export default function FormRecuperar(){
                             justifyContent: 'center',
                         }}>
                             <label>
-                        E-mail: <br/>
-                        <Input  
-                            name='email' 
-                            pattern="email" 
-                            placeholder='exemplo@exemplo.com'
-                            onChange={e => setEmail(e.target.value)}
-                        />
-                        </label>
+                            E-mail: <br/>
+                            <Input  
+                                name='email' 
+                                pattern="email" 
+                                placeholder='exemplo@exemplo.com'
+                                onChange={e => setEmail(e.target.value)} value={email}
+                            />
+                            </label>
                         </Box>
                         
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -69,32 +74,28 @@ export default function FormRecuperar(){
                             justifyContent: 'center',
                         }}>
                             <label>
-                        Confirmar e-mail: <br/>
-                        <Input
-                            pattern="email" 
-                            placeholder='exemplo@exemplo.com'
-                            onChange={e => setConfEmail(e.target.value)}
-                        />
-                        </label>
+                            Confirmar E-mail: <br/>
+                            <Input  
+                                name='confEmail' 
+                                pattern="email" 
+                                placeholder='exemplo@exemplo.com'
+                                onChange={e => setConfEmail(e.target.value)} value={confEmail}
+                            />
+                            </label>
                         </Box>
-
+                        
                         <Box sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                            }}>
-                            <Box sx={{
-                                padding: '.5em',
-                                margin: '1em',
-                                borderRadius: '2em',
-                                backgroundColor: tokens.primary[400],
-                            }}>
-                                <Button onClick={efetuarRecuperacao}>Enviar codico</Button>
-                            </Box>
-                            </Box>
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <Button variant='contained' onClick={efetuarRecuperacao} disabled={enviando}>
+                                {enviando ? <CircularProgress size={20} /> : 'Enviar Email de Recuperação'}
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
         </>

@@ -1,9 +1,9 @@
 import { registerUser } from "@/api/user";
 import { tokens } from "@/app/theme";
-import { Box, Button, Input} from "@mui/material";
+import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from "@mui/material";
 import React from 'react';
 import { useState } from 'react';
-import axios from "axios";
+import { useNotification } from '@/hooks/useNotification';
 
 function testaCPF(cpf){
     cpf = cpf.replace(/\D/g, '');
@@ -19,68 +19,72 @@ function testaCPF(cpf){
         if(r != cpf.substring(j, j+1)) result = false;
     });
     return result;
-
 }
 
-
-
 export default function DadosUsuario(){
-    const [nome, setNome] = useState(localStorage.getItem("userName"));
-    const [cpf, setCPF] = useState(localStorage.getItem("userCPF"));
-    const [email, setEmail] = useState(localStorage.getItem("userMail"));
-    const [telefone, setTelefone] = useState(localStorage.getItem("userTelefone"));
-    const [alerta_email, setAlertaEmail] = useState(localStorage.getItem("userAlertaEmail"));
-    const [alerta_sms, setAlertaSMS] = useState(localStorage.getItem("userAlertaSms"));
-    const [endereco, setEndereco] = useState(localStorage.getItem("userEndereco"));
+    const [nome, setNome] = useState(localStorage.getItem("userName") || "");
+    const [cpf, setCPF] = useState(localStorage.getItem("userCPF") || "");
+    const [email, setEmail] = useState(localStorage.getItem("userMail") || "");
+    const [telefone, setTelefone] = useState(localStorage.getItem("userTelefone") || "");
+    const [alerta_email, setAlertaEmail] = useState(localStorage.getItem("userAlertaEmail") === "1");
+    const [alerta_sms, setAlertaSMS] = useState(localStorage.getItem("userAlertaSms") === "1");
+    const [endereco, setEndereco] = useState(localStorage.getItem("userEndereco") || "");
     const [resposta, setResposta] = useState(0);
-    
-    const [alerta_smsString, setAlerta_smsString] = useState("Sim");
-    const [alerta_emailString, setAlerta_emailString] = useState("Sim");
-
-    
-    
+    const [atualizando, setAtualizando] = useState(false);
+    const { showSuccess, showError, showWarning } = useNotification();
 
     async function fetchData() {
-        
+        try {
+            // TODO: Implementar função de atualização de dados do usuário
+            // const resposta = await updateUserData(nome, cpf, endereco, email, telefone, alerta_sms ? 1 : 0, alerta_email ? 1 : 0);
+            // setResposta(resposta);
+            
+            if(resposta==0){
+                showError("Erro ao atualizar os dados!");
+            }else if(resposta==1){
+                showSuccess("Dados atualizados com sucesso!");
+                // Atualizar localStorage
+                localStorage.setItem("userName", nome);
+                localStorage.setItem("userMail", email);
+                localStorage.setItem("userCPF", cpf);
+                localStorage.setItem("userEndereco", endereco);
+                localStorage.setItem("userTelefone", telefone);
+                localStorage.setItem("userAlertaSms", alerta_sms ? "1" : "0");
+                localStorage.setItem("userAlertaEmail", alerta_email ? "1" : "0");
+            }
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            setAtualizando(false);
+        }
     }
 
     const efetuarAlteracao = () => {
         if(email=="" | nome=="" | cpf=="" | endereco=="" | telefone==""){
-            alert("Por favor, preencher todos os campos");
+            showWarning("Por favor, preencher todos os campos");
         }else {
             const telefoneAlterado = telefone.replace(/\D/g,'');
             
             if(telefoneAlterado.length >= 10 && telefoneAlterado.length <= 11){
                 if(testaCPF(cpf)){
                     if(email.match('@')){
+                        setAtualizando(true);
                         fetchData();
-                        
-                        setTimeout(function() {
-                            if(resposta==0){
-                                alert("Erro ao atualizar os dados!")
-                            }else if(resposta==1){
-                                alert("Dados atualizados com sucesso!");
-                            }
-                        }, 200);
-                        
-                        
-                        
                     }else{
-                        alert("E-mail inválido");
+                        showWarning("E-mail inválido");
                     }
                 }else{
-                    alert("CPF inválido");
+                    showWarning("CPF inválido");
                 }
             }else{
-                alert("Telefone inválido");
+                showWarning("Telefone inválido");
             } 
         }
     };
 
-
-return (
-    <>
-    <Box sx={{
+    return(
+        <>
+        <Box sx={{
                     display: 'flex',
                     flexWrap: 'wrap',
                     justifyContent: 'center',
@@ -102,11 +106,10 @@ return (
                             justifyContent: 'center',
                         }}>
                             <label margin='1px'>
-                            Nome: <br/><Input name='nome' id='nomeID' value={nome}
-                            onChange={e => setNome(e.target.value)}/>
+                            Nome: <br/><Input name='nome' id='nomeID' 
+                            onChange={e => setNome(e.target.value)} value={nome}/>
                             </label>
                         </Box>
-
 
                         <Box sx={{
                             padding: '.5em',
@@ -118,11 +121,10 @@ return (
                         }}>
                         <label>
                         Endereco: <br/>
-                        <Input value={endereco}
-                        onChange={e => setEndereco(e.target.value)}/>
+                        <Input placeholder="Rua, Nº, Bairro"
+                        onChange={e => setEndereco(e.target.value)} value={endereco}/>
                         </label>
                         </Box>
-                        
                         
                         <Box sx={{
                             padding: '.5em',
@@ -133,12 +135,11 @@ return (
                             justifyContent: 'center',   
                         }}>
                         <label>
-                        CPF: <br/><Input name='cpf' id='cpfID' maxLength="14" value={cpf}
-                        onChange={e => setCPF(e.target.value)}/>
+                        CPF: <br/><Input name='cpf' id='cpfID' maxLength="14"
+                        onChange={e => setCPF(e.target.value)} value={cpf}/>
                         </label>
                         </Box>
                         
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -152,13 +153,12 @@ return (
                         <Input  
                             name='email' 
                             pattern="email" 
-                            value={email}
-                            onChange={e => setEmail(e.target.value)}
+                            placeholder='exemplo@exemplo.com'
+                            onChange={e => setEmail(e.target.value)} value={email}
                         />
                         </label>
                         </Box>
                         
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -169,71 +169,65 @@ return (
                         }}>
                         <label>
                         Telefone: <br/>
-                        <Input 
-                            value={telefone}
-                            type="tel"
-                            onChange={e => setTelefone(e.target.value)}
-                        />
+                        <Input placeholder="(00) 00000-0000"
+                        onChange={e => setTelefone(e.target.value)} value={telefone}/>
                         </label>
                         </Box>
-                      
                         
-
                         <Box sx={{
                             padding: '.5em',
-                            margin: '.5em',
-                            borderRadius: '2em',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center',
-                        }}>
-                        <label>
-                            Forma de aviso:
-                            
-                        </label>
-                        </Box>
-                        <Box sx={{
                             margin: '1em',
                             borderRadius: '2em',
                             display: 'flex',
                             flexWrap: 'wrap',
                             justifyContent: 'center',
-                        }}> 
-                        <label>
-                        Aviso SMS: <br/>
-                        <Input 
-                            value={alerta_sms}
-                            type="tel"
-                            onChange={e => setAlertaSMS(e.target.value)}
-                        />
-                        </label>
-                        <label>
-                        Aviso Email: <br/>
-                        <Input 
-                            value={alerta_email}
-                            type="tel"
-                            onChange={e => setAlertaSMS(e.target.value)}
-                        />
-                        </label>
+                        }}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={alerta_email}
+                                        onChange={(e) => setAlertaEmail(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Receber alertas por email"
+                            />
                         </Box>
+                        
                         <Box sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                            }}>
-                            <Box sx={{
-                                padding: '.5em',
-                                margin: '1em',
-                                borderRadius: '2em',
-                                backgroundColor: tokens.primary[400],
-                            }}>
-                                <Button onClick={efetuarAlteracao}>Alterar Dados</Button>
-                            </Box>
-                            </Box>
-                    </Box> 
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={alerta_sms}
+                                        onChange={(e) => setAlertaSMS(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Receber alertas por SMS"
+                            />
+                        </Box>
+                        
+                        <Box sx={{
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <Button variant='contained' onClick={efetuarAlteracao} disabled={atualizando}>
+                                {atualizando ? <CircularProgress size={20} /> : 'Atualizar Dados'}
+                            </Button>
+                        </Box>
+                    </Box>
                 </Box>
-    </>)
+        </>
+    );
 }

@@ -1,32 +1,45 @@
 import { enviaNovaSenha } from "@/api/user";
 import { tokens } from "@/app/theme";
-import { Box, Button, Input } from "@mui/material";
+import { Box, Button, Input, CircularProgress } from "@mui/material";
 import React from 'react';
 import { useState } from 'react';
-import axios from "axios";
+import { useNotification } from '@/hooks/useNotification';
 
 export default function FormRecuperar(){
     const [codigo, setCodigo] = useState("");
     const [senha, setSenha] = useState("");
     const [confSenha, setConfSenha] = useState("");
+    const [alterando, setAlterando] = useState(false);
+    const { showSuccess, showError, showWarning } = useNotification();
 
     async function fetchData() {
-        alert(await enviaNovaSenha(codigo, senha));
+        try {
+            const resultado = await enviaNovaSenha(codigo, senha);
+            showSuccess(resultado);
+            // Limpar formulário
+            setCodigo("");
+            setSenha("");
+            setConfSenha("");
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            setAlterando(false);
+        }
     }
-
 
     const AlterarSenha = () => {
         const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/;
         if(senha.match(regex) && senha==confSenha){
             if(codigo!=""){
-                setTimeout(function() {
-                    fetchData();
-                }, 200);
-                
+                setAlterando(true);
+                fetchData();
+            } else {
+                showWarning("Por favor, informe o código de recuperação");
             }
+        } else {
+            showWarning("Senha inválida. Deve conter pelo menos 8 caracteres, incluindo maiúsculas, minúsculas, números e símbolos.");
         }
     };
-
 
     return(
         <>
@@ -42,7 +55,7 @@ export default function FormRecuperar(){
                             margin: '1em',
                             backgroundColor: tokens.primary[600]+"88",
                             borderRadius: '2em',
-                    }}>
+                        }}>
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -52,22 +65,12 @@ export default function FormRecuperar(){
                             justifyContent: 'center',
                         }}>
                             <label>
-                        Digite o código enviado: <br/>
-                        <Input
-                            onChange={e => setCodigo(e.target.value)}
-                        />
-                        </label>
+                            Código de Recuperação: <br/>
+                            <Input placeholder="Digite o código recebido por email"
+                            onChange={e => setCodigo(e.target.value)} value={codigo}/>
+                            </label>
                         </Box>
-
-                        <Box sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                            }}>
-
+                        
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -76,15 +79,13 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        Senha: <br/>
-                        <Input 
-                            type='password'
-                            onChange={e => setSenha(e.target.value)}
-                        />
-
-                        </label>
+                            <label>
+                            Nova Senha: <br/>
+                            <Input type='password' placeholder="Mínimo 8 caracteres"
+                            onChange={e => setSenha(e.target.value)} value={senha}/>
+                            </label>
                         </Box>
+                        
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -93,21 +94,25 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                            Confirme a senha: <br/><Input type='password' name='confSenha' id='confSenhaID'
-                            onChange={e => setConfSenha(e.target.value)}
-                        />
-                        </label>
-                        </Box>                   
-                            <Box sx={{
-                                padding: '.5em',
-                                margin: '1em',
-                                borderRadius: '2em',
-                                backgroundColor: tokens.primary[400],
-                            }}>
-                                <Button onClick={AlterarSenha}>Alterar Senha</Button>
-                            </Box>
-                            </Box>
+                            <label>
+                            Confirmar Nova Senha: <br/>
+                            <Input type='password' placeholder="Confirme sua nova senha"
+                            onChange={e => setConfSenha(e.target.value)} value={confSenha}/>
+                            </label>
+                        </Box>
+                        
+                        <Box sx={{
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <Button variant='contained' onClick={AlterarSenha} disabled={alterando}>
+                                {alterando ? <CircularProgress size={20} /> : 'Alterar Senha'}
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
         </>

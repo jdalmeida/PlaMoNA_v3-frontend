@@ -1,13 +1,13 @@
 import { atualizaConfSensor, pesquisaSensores } from "@/api/user";
 import { tokens } from "@/app/theme";
-import { Box, Button, Input, Radio } from "@mui/material";
+import { Box, Button, Input, CircularProgress, FormControlLabel, Checkbox } from "@mui/material";
 import React from 'react';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import axios from "axios";
+import { useNotification } from '@/hooks/useNotification';
 
-export default function FormRecuperar(){
+export default function FormConfiguracaoSensor(){
     const sensores = [{label: 'Sensor do Grão Para', codigo: 1}, {label: 'Sensor de Olavo Bilack', codigo: 2 }];
    
     const [value, setValue] = React.useState(0);
@@ -22,36 +22,55 @@ export default function FormRecuperar(){
     const [msgMax, setMsgMax] = useState("");
     const [sensorBanco, setSensorBanco]= useState([]);
     const [sensor, setSensor] = useState(0);
-    
-    
-    
+    const [configurando, setConfigurando] = useState(false);
+    const [pesquisando, setPesquisando] = useState(false);
+    const { showSuccess, showError, showWarning } = useNotification();
 
     async function fetchData() {
-        alert(await atualizaConfSensor(codValue, descricao, nvlMin, 
-            nvlMax, envMin, envMax, msgMin, msgMax));
+        try {
+            const resultado = await atualizaConfSensor(codValue, descricao, nvlMin, 
+                nvlMax, envMin, envMax, msgMin, msgMax);
+            showSuccess(resultado);
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            setConfigurando(false);
+        }
     }
 
     async function fetchDataPesquisa() {
-        return (await pesquisaSensores(codValue));
+        try {
+            const resultado = await pesquisaSensores(codValue);
+            setSensorBanco(resultado);
+            showSuccess("Sensor encontrado com sucesso!");
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            setPesquisando(false);
+        }
     }
 
-
     const efetuarPesquisa = () => {
-        
-        setSensorBanco (fetchDataPesquisa());
-            
-        setTimeout(function() {
-        console.log("Array: " + sensorBanco);
-        }, 10000);
-        
+        if (codValue === 0) {
+            showWarning("Por favor, selecione um sensor");
+            return;
+        }
+        setPesquisando(true);
+        fetchDataPesquisa();
     };
 
     const efetuarConfigurar = () => {
-        setTimeout(function() {
-            fetchData();
-        }, 200);
+        if (codValue === 0) {
+            showWarning("Por favor, selecione um sensor");
+            return;
+        }
+        if (descricao === "" || msgMin === "" || msgMax === "") {
+            showWarning("Por favor, preencha todos os campos obrigatórios");
+            return;
+        }
+        setConfigurando(true);
+        fetchData();
     };
-
 
     return(
         <>
@@ -67,7 +86,7 @@ export default function FormRecuperar(){
                             margin: '1em',
                             backgroundColor: tokens.primary[600]+"88",
                             borderRadius: '2em',
-                    }}>
+                        }}>
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -76,52 +95,23 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                           <Autocomplete
-                           value={value}
-                           onChange={(event, newValue) => {
-                             setValue(newValue);
-                             setCodValue(newValue.codigo);
-                           }}
-                           inputValue={inputValue}
-                           codValue={codValue}
-                           onInputChange={(event, newInputValue) => {
-                             setInputValue(newInputValue);
-                           }}
-                           
-                            id="combo-box-demo"
-                            options={sensores}
-                            sx={{ width: 300 }}
-                            renderInput={(params) => <TextField {...params} label="Sensores" />}
+                            <Autocomplete
+                                value={value}
+                                onChange={(event, newValue) => {
+                                    setValue(newValue);
+                                    setCodValue(newValue ? newValue.codigo : 0);
+                                }}
+                                inputValue={inputValue}
+                                onInputChange={(event, newInputValue) => {
+                                    setInputValue(newInputValue);
+                                }}
+                                id="controllable-states-demo"
+                                options={sensores}
+                                sx={{ width: 300 }}
+                                renderInput={(params) => <TextField {...params} label="Selecione o Sensor" />}
                             />
-                            
-                        </Box>
-
-                        
-                        <hr />
-                        
-                        
-                        
-                        <Box sx={{
-                            padding: '.5em',
-                            margin: '1em',
-                            borderRadius: '2em',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'center',   
-                        }}>
-                        <label>
-                        Descrição: <br/>
-                        <Input 
-                        
-                        id="inpDesc"
-                        onChange={e => setDescricao(e.target.value)}/>
-                        </label>
                         </Box>
                         
-                        <hr />
-                        
-                        
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -130,26 +120,11 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        Nível Minimo: <br/>
-                        <Input 
-                            id="inpNivelMin"
-                            type="number"
-                            onChange={e => setNvlMin(e.target.value)}
-                        /><hr/>
-                        <Input 
-                                id="radMin"
-                                type='radio'
-                                onChange={e => setEnvMin(e.target.checked)}
-                            /> Enviar alerta caso atinga nível mínimo<br/>
-                        </label>
-
-                        
-
-
+                            <Button variant='contained' onClick={efetuarPesquisa} disabled={pesquisando}>
+                                {pesquisando ? <CircularProgress size={20} /> : 'Pesquisar Sensor'}
+                            </Button>
                         </Box>
-                        <hr />
-
+                        
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -158,18 +133,13 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        Mensagem enviada: <br/>
-                        <Input 
-                        id="inpMsgMin"
-                        onChange={e => setMsgMin(e.target.value)}/>
-                        </label>
-
-
+                            <label>
+                            Descrição: <br/>
+                            <Input placeholder="Descrição do sensor"
+                            onChange={e => setDescricao(e.target.value)} value={descricao}/>
+                            </label>
                         </Box>
                         
-                        <hr />
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -178,24 +148,13 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        Nível Máximo: <br/>
-                        <Input 
-                            id="inpNivelMax"
-                            type="number"
-                            onChange={e => setNvlMax(e.target.value)}
-                        /><hr/>
-                        <Input 
-                                id="radMax"
-                                type='radio'
-                                onChange={e => setEnvMax(e.target.checked)}
-                            /> Enviar alerta caso atinga nível Máximo<br/>
-                        </label>
+                            <label>
+                            Nível Mínimo: <br/>
+                            <Input type="number" placeholder="0.00"
+                            onChange={e => setNvlMin(parseFloat(e.target.value))} value={nvlMin}/>
+                            </label>
                         </Box>
                         
-                        <hr />
-                        
-
                         <Box sx={{
                             padding: '.5em',
                             margin: '1em',
@@ -204,36 +163,95 @@ export default function FormRecuperar(){
                             flexWrap: 'wrap',
                             justifyContent: 'center',
                         }}>
-                        <label>
-                        Mensagem enviada: <br/>
-                        <Input 
-                        id="inpMsgMax"
-                        onChange={e => setMsgMax(e.target.value)}/>
-                        </label>
-
-
+                            <label>
+                            Nível Máximo: <br/>
+                            <Input type="number" placeholder="0.00"
+                            onChange={e => setNvlMax(parseFloat(e.target.value))} value={nvlMax}/>
+                            </label>
                         </Box>
-
                         
                         <Box sx={{
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                justifyContent: 'center',
-                            }}>
-                            <Box sx={{
-                                padding: '.5em',
-                                margin: '1em',
-                                borderRadius: '2em',
-                                backgroundColor: tokens.primary[400],
-                            }}>
-                                <Button onClick={efetuarConfigurar}>Configurar</Button>
-                            </Box>
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={envMin}
+                                        onChange={(e) => setEnvMin(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Enviar alerta no nível mínimo"
+                            />
                         </Box>
-
                         
+                        <Box sx={{
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={envMax}
+                                        onChange={(e) => setEnvMax(e.target.checked)}
+                                        color="primary"
+                                    />
+                                }
+                                label="Enviar alerta no nível máximo"
+                            />
+                        </Box>
+                        
+                        <Box sx={{
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <label>
+                            Mensagem Nível Mínimo: <br/>
+                            <Input placeholder="Mensagem de alerta para nível mínimo"
+                            onChange={e => setMsgMin(e.target.value)} value={msgMin}/>
+                            </label>
+                        </Box>
+                        
+                        <Box sx={{
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <label>
+                            Mensagem Nível Máximo: <br/>
+                            <Input placeholder="Mensagem de alerta para nível máximo"
+                            onChange={e => setMsgMax(e.target.value)} value={msgMax}/>
+                            </label>
+                        </Box>
+                        
+                        <Box sx={{
+                            padding: '.5em',
+                            margin: '1em',
+                            borderRadius: '2em',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                        }}>
+                            <Button variant='contained' onClick={efetuarConfigurar} disabled={configurando}>
+                                {configurando ? <CircularProgress size={20} /> : 'Configurar Sensor'}
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
         </>

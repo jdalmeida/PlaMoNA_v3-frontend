@@ -69,7 +69,7 @@ const WeatherDisplay = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchData();

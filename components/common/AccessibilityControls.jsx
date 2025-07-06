@@ -1,6 +1,7 @@
+import { ZoomIn, ZoomOut, RestartAlt } from '@mui/icons-material';
+import { Box, IconButton, Tooltip, Typography } from '@mui/material';
 import React from 'react';
-import { Box, Button, IconButton, Tooltip, Typography } from '@mui/material';
-import { ZoomIn, ZoomOut, RestartAlt, Accessibility } from '@mui/icons-material';
+
 import { useAccessibility } from '@/hooks/useAccessibility';
 
 const AccessibilityControls = () => {

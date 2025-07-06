@@ -11,7 +11,8 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  ListItemButton
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
@@ -68,9 +69,11 @@ export default function Navbar ({ buttons, logo }) {
   const drawer = (
     <Box sx={{ width: 250 }}>
       <List>
-        {buttons.map((button, index) => (
-          <ListItem button key={index} component="a" href={button.href} onClick={handleDrawerToggle}>
-            <ListItemText primary={button.text} />
+        {buttons.map((button) => (
+          <ListItem key={button.href} component="a" href={button.href} onClick={handleDrawerToggle}>
+            <ListItemButton>
+              <ListItemText primary={button.text} />
+            </ListItemButton>
           </ListItem>
         ))}
       </List>
@@ -120,12 +123,12 @@ export default function Navbar ({ buttons, logo }) {
             }}
             className="align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2"
           >
-            {buttons.map((button, index) => (
+            {buttons.map((button) => (
               <Button
                 variant="outlined"
                 size={'small'}
                 color="primary"
-                key={index}
+                key={button.href}
                 href={button.href}
                 sx={{
                   fontSize: { sm: '0.75rem', md: '0.875rem' },

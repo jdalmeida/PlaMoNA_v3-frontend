@@ -1,24 +1,33 @@
-import {Box, Button} from "@mui/material";
+import {Box, Button, CircularProgress} from "@mui/material";
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@mui/icons-material'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Grafico from "./Grafico";
 import { obterDia } from "@/api/database";
+import { useNotification } from '@/hooks/useNotification';
 
-const fetchData = async (dia1, setData) => {
-    const res = await obterDia("diaEsp", dia1);
-    setData(res);
+const fetchData = async (dia1, setData, setLoading, showError) => {
+    try {
+        setLoading(true);
+        const res = await obterDia("diaEsp", dia1);
+        setData(res);
+    } catch (error) {
+        showError('Erro ao carregar dados do gráfico');
+        setData([]);
+    } finally {
+        setLoading(false);
+    }
 };
 
 export default function GraficoDia () {
     const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const { showError } = useNotification();
 
     useEffect(() => {
         setData([]);
-        setTimeout(function() {
-            fetchData(dia1, setData);
-        }, 200);
-    }, [dia1]);
+        fetchData(dia1, setData, setLoading, showError);
+    }, [dia1, showError]);
 
     const aumentarDia1 = () => {
         const dataAtual = new Date(dia1);
@@ -49,27 +58,45 @@ export default function GraficoDia () {
                         alignItems: "center"
                     }
                 }>
-                    <Button variant="outlined" sx={{
-                        height: "5em"
-                    }}
-                        onClick={diminuirDia1}>
+                    <Button 
+                        variant="outlined" 
+                        sx={{ height: "5em" }}
+                        onClick={diminuirDia1}
+                        disabled={loading}
+                    >
                         <ArrowLeftOutlined />
                     </Button>
 
                     <Box sx={
                         {
                             overflowX: "scroll",
-                            overflowY: "hidden"
+                            overflowY: "hidden",
+                            position: "relative"
                         }
                     }>
                         <Box height="30em" width="80em">
-                            <Grafico data={data} />
+                            {loading ? (
+                                <Box 
+                                    sx={{ 
+                                        display: 'flex', 
+                                        justifyContent: 'center', 
+                                        alignItems: 'center',
+                                        height: '100%'
+                                    }}
+                                >
+                                    <CircularProgress />
+                                </Box>
+                            ) : (
+                                <Grafico data={data} />
+                            )}
                         </Box>
                     </Box>
-                    <Button variant="outlined" sx={{
-                        height: "5em"
-                    }}
-                        onClick={aumentarDia1}>
+                    <Button 
+                        variant="outlined" 
+                        sx={{ height: "5em" }}
+                        onClick={aumentarDia1}
+                        disabled={loading}
+                    >
                         <ArrowRightOutlined />
                     </Button>
                 </Box>

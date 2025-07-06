@@ -1,16 +1,58 @@
 // Configuração centralizada de variáveis de ambiente
+const getEnvironment = () => {
+    return process.env.NODE_ENV || 'development';
+};
+
+const getBackendUrl = () => {
+    // Prioridade: variável de ambiente > configuração baseada no ambiente > fallback
+    if (process.env.NEXT_PUBLIC_BACKEND_URL) {
+        return process.env.NEXT_PUBLIC_BACKEND_URL;
+    }
+    
+    const env = getEnvironment();
+    switch (env) {
+        case 'production':
+            return process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL || 'https://api.plamona.com';
+        case 'staging':
+            return process.env.NEXT_PUBLIC_STAGING_BACKEND_URL || 'https://staging-api.plamona.com';
+        case 'development':
+        default:
+            return 'http://127.0.0.1:4000';
+    }
+};
+
+const getWeatherApiKey = () => {
+    const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
+    if (!apiKey) {
+        console.warn('Weather API key não configurada. Configure NEXT_PUBLIC_WEATHER_API_KEY no arquivo .env.local');
+    }
+    return apiKey;
+};
+
 export const config = {
     weather: {
-        apiKey: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
-        baseUrl: 'https://api.weatherapi.com/v1'
+        apiKey: getWeatherApiKey(),
+        baseUrl: 'https://api.weatherapi.com/v1',
+        defaultLocation: 'Venâncio',
+        defaultLanguage: 'pt'
     },
     backend: {
-        url: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://127.0.0.1:4000'
+        url: getBackendUrl(),
+        timeout: 10000, // 10 segundos
+        retries: 3
     },
     app: {
         name: 'PlaMoNA',
         version: '3.0.0',
-        environment: process.env.NODE_ENV || 'development'
+        environment: getEnvironment(),
+        isDevelopment: getEnvironment() === 'development',
+        isProduction: getEnvironment() === 'production',
+        isStaging: getEnvironment() === 'staging'
+    },
+    features: {
+        enableNotifications: true,
+        enableAnalytics: process.env.NODE_ENV === 'production',
+        enableDebugMode: process.env.NODE_ENV === 'development'
     }
 };
 
@@ -24,9 +66,44 @@ export function validateConfig() {
     const missing = requiredVars.filter(v => !v.value);
     
     if (missing.length > 0) {
-        throw new Error(
-            `Variáveis de ambiente obrigatórias não configuradas: ${missing.map(v => v.key).join(', ')}. ` +
-            'Configure estas variáveis no arquivo .env.local'
-        );
+        const errorMessage = `Variáveis de ambiente obrigatórias não configuradas: ${missing.map(v => v.key).join(', ')}. ` +
+            'Configure estas variáveis no arquivo .env.local';
+        
+        if (config.app.isDevelopment) {
+            console.error(errorMessage);
+        } else {
+            throw new Error(errorMessage);
+        }
+    }
+}
+
+// Função para obter configuração específica do ambiente
+export function getConfigForEnvironment(env) {
+    const originalEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = env;
+    
+    const envConfig = {
+        weather: {
+            apiKey: getWeatherApiKey(),
+            baseUrl: 'https://api.weatherapi.com/v1'
+        },
+        backend: {
+            url: getBackendUrl()
+        }
+    };
+    
+    process.env.NODE_ENV = originalEnv;
+    return envConfig;
+}
+
+// Função para debug da configuração (apenas em desenvolvimento)
+export function debugConfig() {
+    if (config.app.isDevelopment) {
+        console.log('🔧 Configuração atual:', {
+            environment: config.app.environment,
+            backendUrl: config.backend.url,
+            weatherApiConfigured: !!config.weather.apiKey,
+            features: config.features
+        });
     }
 } 

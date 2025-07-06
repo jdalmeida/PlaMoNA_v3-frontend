@@ -1,9 +1,10 @@
 import { tokens } from "@/app/theme";
-import { Button, Box, Typography, Slide, Avatar, Menu, MenuItem } from "@mui/material";
+import { Button, Box, Typography, Slide, Avatar, Menu, MenuItem, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useUser } from '@/contexts/UserContext';
 import { useNotification } from '@/hooks/useNotification';
 import { useState } from 'react';
+import { Menu as MenuIcon } from '@mui/icons-material';
 
 const theme = createTheme({
   palette: {
@@ -26,6 +27,7 @@ export default function Navbar({buttons, logo}) {
   const { user, logout, isAuthenticated } = useUser();
   const { showSuccess } = useNotification();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,6 +47,28 @@ export default function Navbar({buttons, logo}) {
     }
   };
 
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <Box sx={{ width: 250 }}>
+      <List>
+        {buttons.map((button, index) => (
+          <ListItem 
+            button 
+            key={index} 
+            component="a" 
+            href={button.href}
+            onClick={handleDrawerToggle}
+          >
+            <ListItemText primary={button.text} />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <>
     <ThemeProvider theme={theme}>
@@ -52,16 +76,45 @@ export default function Navbar({buttons, logo}) {
         backgroundColor: tokens.blueAccent[300]+"77", 
         flexDirection: {sm: 'row', xs: 'column'},
         justifyContent: 'space-between',
-        alignItems: 'center'
-        }}>
+        alignItems: 'center',
+        px: { xs: 2, sm: 3, md: 4, lg: 5 }
+      }}>
         <Box sx={{
           color: tokens.grey[900],
-        }}className="align-center justify-center p-3 lg:text-3xl md:text-lg">
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }} className="align-center justify-center p-3 lg:text-3xl md:text-lg">
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
           {logo}
         </Box>
-        <Box sx={{alignItems: 'center', display: 'flex', gap: '.5em'}} className="align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2">
+        
+        {/* Desktop Navigation */}
+        <Box sx={{
+          alignItems: 'center', 
+          display: { xs: 'none', sm: 'flex' }, 
+          gap: '.5em'
+        }} className="align-center lg:justify-center,space-x-4,p-3 md:justify-end,space-x-2 p-2">
           {buttons.map((b, index) => (
-            <Button variant="outlined" size={'small'} color='primary' key={index} href={b.href}>
+            <Button 
+              variant="outlined" 
+              size={'small'} 
+              color='primary' 
+              key={index} 
+              href={b.href}
+              sx={{ 
+                fontSize: { sm: '0.75rem', md: '0.875rem' },
+                px: { sm: 1, md: 2 }
+              }}
+            >
               {b.text}
             </Button>
           ))}
@@ -105,6 +158,23 @@ export default function Navbar({buttons, logo}) {
           )}
         </Box>
       </Box>
+
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+        sx={{
+          display: { xs: 'block', sm: 'none' },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 },
+        }}
+      >
+        {drawer}
+      </Drawer>
+
       {/* Mostar se usuário não está cadastrado */}
       {!isAuthenticated() && (
         <Box sx={{
@@ -114,11 +184,21 @@ export default function Navbar({buttons, logo}) {
           flexDirection: {sm: 'row', xs: 'column'},
           justifyContent: 'center',
           alignItems: 'center',
+          px: { xs: 1, sm: 2 }
         }}>
           <Slide direction="left" in={true} mountOnEnter unmountOnExit>
-            <Typography variant={`${
+            <Typography 
+              variant={`${
                 theme.breakpoints.down("md") ? "body2" : "body1"
-              }`} color={'#fff'} textAlign={'center'} maxHeight={'2em'} overflow={'hidden'} whiteSpace={'nowrap'} textOverflow={'ellipsis'}> 
+              }`} 
+              color={'#fff'} 
+              textAlign={'center'} 
+              maxHeight={'2em'} 
+              overflow={'hidden'} 
+              whiteSpace={'nowrap'} 
+              textOverflow={'ellipsis'}
+              sx={{ px: { xs: 1, sm: 2 } }}
+            > 
             Registre-se para receber alertas de cheia ou inundação!
             </Typography>
           </Slide> 

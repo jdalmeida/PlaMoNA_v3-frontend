@@ -3,44 +3,65 @@ import {
     Box,
     Button,
     MenuItem,
-    Select
+    Select,
+    CircularProgress
 } from '@mui/material';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 import Grafico from './Grafico';
 import { obterComparacao } from '@/api/database';
 import { Refresh } from '@mui/icons-material';
-
+import { useNotification } from '@/hooks/useNotification';
 
 export default function GraficoComp() {
-    
-    if(localStorage.getItem('periodoComp')==null){
-        localStorage.setItem('periodoComp', 'dia');
-    }
-    const [periodo, setPeriodo] = useState(localStorage.getItem('periodoComp'));
+    const [periodo, setPeriodo] = useState(localStorage.getItem('periodoComp') || 'dia');
     const [dia1, setDia1] = useState(new Date().toISOString().substring(0, 10));
     const [dia2, setDia2] = useState(new Date().toISOString().substring(0, 10));
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const { showError } = useNotification();
 
-    useEffect(() => {
-        async function fetchData() {
+    const fetchData = async () => {
+        try {
+            setLoading(true);
             setData([]);
             
             const result = await obterComparacao(periodo, localStorage.getItem("data1"), localStorage.getItem("data2"));
-            console.log("resultado: "+result);
             setData(result);
-            
+        } catch (error) {
+            showError('Erro ao carregar dados de comparação');
+            setData([]);
+        } finally {
+            setLoading(false);
         }
-        fetchData();
-      }, []);
+    };
 
-     
+    useEffect(() => {
+        fetchData();
+    }, [periodo]);
 
     const handlePeriodo = (event) => {
-        
-        localStorage.setItem('periodoComp', event.target.value);
-        location.reload();
-        setPeriodo(localStorage.getItem('periodoComp'));
+        const newPeriodo = event.target.value;
+        localStorage.setItem('periodoComp', newPeriodo);
+        setPeriodo(newPeriodo);
+    };
+
+    const handleData1Change = (newValue) => {
+        if (newValue) {
+            const formattedDate = newValue.format('YYYY/MM/DD');
+            localStorage.setItem("data1", formattedDate);
+        }
+    };
+
+    const handleData2Change = (newValue) => {
+        if (newValue) {
+            const formattedDate = newValue.format('YYYY/MM/DD');
+            localStorage.setItem("data2", formattedDate);
+        }
+    };
+
+    const handleRefresh = () => {
+        fetchData();
     };
 
     return (
@@ -52,43 +73,66 @@ export default function GraficoComp() {
                         p: {sx: "0.5em", sm: "0.5em 5em"},
                         width: {sx: "16.5em", sm: "100%"}
                     }}>
-                <Select variant="outlined"
-                    value={periodo}
-                    label="Período"
-                    onChange={handlePeriodo}
+                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+                    <Select 
+                        variant="outlined"
+                        value={periodo}
+                        label="Período"
+                        onChange={handlePeriodo}
+                        sx={{ minWidth: 120 }}
                     >
-                    <MenuItem value={'dia'}>Dia</MenuItem>
-                    <MenuItem value={'semana'}>Semana</MenuItem>
-                    <MenuItem value={'mes'}>Mês</MenuItem>
-                    <MenuItem value={'ano'}>Ano</MenuItem>
-                </Select>
+                        <MenuItem value={'dia'}>Dia</MenuItem>
+                        <MenuItem value={'semana'}>Semana</MenuItem>
+                        <MenuItem value={'mes'}>Mês</MenuItem>
+                        <MenuItem value={'ano'}>Ano</MenuItem>
+                    </Select>
+                    
+                    <Button 
+                        variant="outlined" 
+                        onClick={handleRefresh}
+                        disabled={loading}
+                        startIcon={loading ? <CircularProgress size={16} /> : <Refresh />}
+                    >
+                        Atualizar
+                    </Button>
+                </Box>
+                
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Data 1"
-                        dateFormat="yyyy/MM/dd"
-                        onChange={
-                            (newValue) => localStorage.setItem("data1", newValue)
-                            
-                        }
-                        
+                    <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                        <DatePicker 
+                            label="Data 1"
+                            dateFormat="yyyy/MM/dd"
+                            onChange={handleData1Change}
                         />
-                    <DatePicker label="Data 2"
-                        dateFormat="yyyy/MM/dd"
-                        onChange={
-                            (newValue) => localStorage.setItem("data2", newValue)
-                            
-                        }
-                        openTo="day"
+                        <DatePicker 
+                            label="Data 2"
+                            dateFormat="yyyy/MM/dd"
+                            onChange={handleData2Change}
+                            openTo="day"
                         />
-                        <Button></Button>
-                        
+                    </Box>
                 </LocalizationProvider>
             </Box>
+            
             <Box justifyContent={'center'} sx={{
                     overflowX: "scroll",
                     overflowY: "hidden"
                 }}>
                 <Box height="30em" width="70em" display={'flex'} justifyContent={'center'}>
-                    <Grafico data={data}/>
+                    {loading ? (
+                        <Box 
+                            sx={{ 
+                                display: 'flex', 
+                                justifyContent: 'center', 
+                                alignItems: 'center',
+                                height: '100%'
+                            }}
+                        >
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <Grafico data={data}/>
+                    )}
                 </Box>
             </Box>
         </Box>

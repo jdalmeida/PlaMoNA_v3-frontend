@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cad_niveis {
+  id               Int       @id @unique(map: "id_UNIQUE") @default(autoincrement()) @db.TinyInt
+  descricao        String?   @db.VarChar(45)
+  nivel_inicial    Decimal?  @db.Decimal(6, 2)
+  nivel_final      Decimal?  @db.Decimal(6, 2)
+  cor_gota         String?   @db.VarChar(9)
+  alertar          String?   @db.VarChar(1)
+  tempo            DateTime? @db.Time(0)
+  sensor_id_sensor Int       @db.TinyInt
+  sensor           sensor    @relation(fields: [sensor_id_sensor], references: [id_sensor], onDelete: NoAction, onUpdate: NoAction, map: "fk_cad_niveis_sensor1")
+
+  @@index([sensor_id_sensor], map: "fk_cad_niveis_sensor1_idx")
+}
+
+model cid_alvo {
+  id_cid   Int        @id @default(autoincrement()) @db.TinyInt
+  nome     String?    @db.VarChar(80)
+  rio_alvo rio_alvo[]
+}
+
+model conf_sensor {
+  id             Int      @id @default(autoincrement())
+  idSensor       Int?     @db.TinyInt
+  descricao_conf String?  @db.VarChar(100)
+  nivelMin       Decimal? @db.Decimal(6, 2)
+  alertarMin     Boolean?
+  nivelMax       Decimal? @db.Decimal(6, 2)
+  alertarMax     Boolean?
+  msgMin         String?  @db.VarChar(100)
+  msgMax         String?  @db.VarChar(100)
+}
+
+model criptografada {
+  idCriptografada Int    @id @default(autoincrement())
+  mensagem        String @db.VarChar(220)
+}
+
+model medicoes {
+  idMedicoes             Int   @id @default(autoincrement())
+  idEquipamento          Int
+  ano                    Int
+  mes                    Int
+  dia                    Int
+  hora                   Int
+  minuto                 Int
+  segundo                Int
+  intensidadeSinalGSM    Int
+  tensaoBateria          Float @db.Float
+  tensaoModem            Float @db.Float
+  nivelAgua              Float @db.Float
+  temperaturaAmbiente    Float @db.Float
+  chuvaAcumulada         Float @db.Float
+  umidade                Float @db.Float
+  correnteBateria        Float @db.Float
+  CorrenteInput          Float @db.Float
+  verificacaoIntegridade Int   @db.UnsignedInt
+}
+
+model rio_alvo {
+  id_rio          Int      @id @default(autoincrement()) @db.TinyInt
+  nome            String?  @db.VarChar(80)
+  cid_alvo_id_cid Int      @db.TinyInt
+  cid_alvo        cid_alvo @relation(fields: [cid_alvo_id_cid], references: [id_cid], onDelete: NoAction, onUpdate: NoAction, map: "fk_rio_alvo_cid_alvo1")
+  sensor          sensor[]
+
+  @@index([cid_alvo_id_cid], map: "fk_rio_alvo_cid_alvo1_idx")
+}
+
+model sensor {
+  id_sensor        Int          @id @default(autoincrement()) @db.TinyInt
+  descricao_sensor String?      @db.VarChar(80)
+  rio_alvo_id_rio  Int          @db.TinyInt
+  cad_niveis       cad_niveis[]
+  rio_alvo         rio_alvo     @relation(fields: [rio_alvo_id_rio], references: [id_rio], onDelete: NoAction, onUpdate: NoAction, map: "fk_sensor_rio_alvo1")
+  usuario          usuario[]
+
+  @@index([rio_alvo_id_rio], map: "fk_sensor_rio_alvo1_idx")
+}
+
+model usuario {
+  id_usuario       Int     @default(autoincrement()) @db.TinyInt
+  nome             String? @db.VarChar(80)
+  cpf              String  @db.VarChar(20)
+  endereco         String? @db.VarChar(80)
+  email            String? @unique(map: "email_UNIQUE") @db.VarChar(70)
+  telefone         String  @db.VarChar(45)
+  sensor_id_sensor Int     @db.TinyInt
+  alerta_sms       String? @db.VarChar(1)
+  alerta_email     String  @db.VarChar(1)
+  senha            String  @db.VarChar(60)
+  acesso           Boolean
+  sensor           sensor  @relation(fields: [sensor_id_sensor], references: [id_sensor], onDelete: NoAction, onUpdate: NoAction, map: "fk_usuario_sensor1")
+
+  @@id([id_usuario, sensor_id_sensor])
+  @@index([sensor_id_sensor], map: "fk_usuario_sensor1_idx")
+}

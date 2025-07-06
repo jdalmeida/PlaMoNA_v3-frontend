@@ -17,7 +17,7 @@ export default function HomePage () {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resultado = await obterMedicao('24h');
+        const resultado = await obterMedicao('semana');
         setDados(resultado);
       } catch (error) {
         console.error('Erro ao obter dados:', error);

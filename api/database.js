@@ -9,7 +9,20 @@ export const obterMedicao = async periodo => {
     return response.data;
   } catch (error) {
     console.error('Erro ao obter dados:', error);
-    throw new Error('Não foi possível obter os dados de medição. Tente novamente mais tarde.');
+    
+    // Verificar se é um erro de rede ou servidor
+    if (error.response) {
+      // Erro de resposta do servidor
+      const status = error.response.status;
+      const message = error.response.data?.message || 'Erro no servidor';
+      throw new Error(`Erro ${status}: ${message}`);
+    } else if (error.request) {
+      // Erro de rede
+      throw new Error('Erro de conexão. Verifique sua internet e tente novamente.');
+    } else {
+      // Outro tipo de erro
+      throw new Error('Não foi possível obter os dados de medição. Tente novamente mais tarde.');
+    }
   }
 };
 
@@ -25,12 +38,22 @@ export const obterComparacao = async (periodo, comp1, comp2) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao obter dados de comparação:', error);
-    throw new Error('Não foi possível obter dados de comparação. Tente novamente mais tarde.');
+    
+    if (error.response) {
+      const status = error.response.status;
+      const message = error.response.data?.message || 'Erro no servidor';
+      throw new Error(`Erro ${status}: ${message}`);
+    } else if (error.request) {
+      throw new Error('Erro de conexão. Verifique sua internet e tente novamente.');
+    } else {
+      throw new Error('Não foi possível obter dados de comparação. Tente novamente mais tarde.');
+    }
   }
 };
 
 //Função para obter dia
-//Periodo pode ser "dia" ou "diaEsp" <- "dia" pega do dia atual, e "diaEsp" pega de qualquer dia (usado no gráfico com flechinha)
+//Periodo pode ser "dia" ou "diaEsp" <- "dia" pega do dia atual, e "diaEsp" pega de qualquer dia 
+// (usado no gráfico com flechinha)
 export const obterDia = async (periodo, comp1) => {
   try {
     const response = await axios.post(`${config.backend.url}/comparacao`, {
@@ -41,6 +64,15 @@ export const obterDia = async (periodo, comp1) => {
     return response.data;
   } catch (error) {
     console.error('Erro ao obter dados do dia:', error);
-    throw new Error('Não foi possível obter dados do dia. Tente novamente mais tarde.');
+    
+    if (error.response) {
+      const status = error.response.status;
+      const message = error.response.data?.message || 'Erro no servidor';
+      throw new Error(`Erro ${status}: ${message}`);
+    } else if (error.request) {
+      throw new Error('Erro de conexão. Verifique sua internet e tente novamente.');
+    } else {
+      throw new Error('Não foi possível obter dados do dia. Tente novamente mais tarde.');
+    }
   }
 };

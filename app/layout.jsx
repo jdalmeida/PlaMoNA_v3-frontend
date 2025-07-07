@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { UserProvider } from '../contexts/UserContext';
 
-import { TRPCProvider } from './components/TRPCProvider';
+import { TRPCProvider } from './_components/TRPCProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 

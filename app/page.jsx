@@ -53,7 +53,7 @@ export default function HomePage () {
                 opacity: 0.9
               }}
             >
-              Sistema Inteligente de Monitoramento do Nível das Águas
+              Plataforma de Monitoramento do Nível das Águas
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
               <Chip
